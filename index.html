@@ -88,6 +88,13 @@
             background-color: #edebe9;
         }
 
+        /* Active State for Scroll Spy */
+        .nav-links li a.active {
+            background-color: #edebe9;
+            border-left: 4px solid var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
         .nav-links li a i {
             width: 24px;
             color: var(--primary-blue);
@@ -101,6 +108,7 @@
             overflow-y: auto;
             padding: 40px 60px;
             scroll-behavior: smooth;
+            position: relative;
         }
 
         .module-section {
@@ -246,14 +254,10 @@
         <ul class="nav-links">
             <li><a href="#mod1"><i class="fa-solid fa-id-card"></i> 1. Identity</a></li>
             <li><a href="#mod2"><i class="fa-solid fa-scale-balanced"></i> 2. Governance & Policy</a></li>
-            <li><a href="#mod3"><i class="fa-solid fa-terminal"></i> 3. Azure Administration</a></li>
             <li><a href="#mod4"><i class="fa-solid fa-network-wired"></i> 4. Virtual Networking</a></li>
             <li><a href="#mod5"><i class="fa-solid fa-route"></i> 5. Intersite Connectivity</a></li>
-            <li><a href="#mod6"><i class="fa-solid fa-traffic-light"></i> 6. Traffic Management</a></li>
             <li><a href="#mod7"><i class="fa-solid fa-database"></i> 7. Azure Storage</a></li>
             <li><a href="#mod8"><i class="fa-solid fa-server"></i> 8. Virtual Machines</a></li>
-            <li><a href="#mod9"><i class="fa-solid fa-cubes"></i> 9. Serverless & Containers</a></li>
-            <li><a href="#mod10"><i class="fa-solid fa-shield-halved"></i> 10. Data Protection</a></li>
             <li><a href="#mod11"><i class="fa-solid fa-chart-line"></i> 11. Monitoring</a></li>
         </ul>
     </nav>
@@ -473,5 +477,40 @@
 
     </main>
 
+    <!-- Scroll Spy Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainContent = document.querySelector('.main-content');
+            const sections = document.querySelectorAll('.module-section');
+            const navLinks = document.querySelectorAll('.nav-links li a');
+
+            function updateActiveLink() {
+                let currentSectionId = '';
+                
+                // Determine which section is currently in view
+                sections.forEach(section => {
+                    // Check if the scroll position is past the top of the section (minus a 150px buffer for better UX)
+                    const sectionTop = section.offsetTop - mainContent.offsetTop;
+                    if (mainContent.scrollTop >= sectionTop - 150) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                // Apply active class to the corresponding navigation link
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentSectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            // Listen for scrolling in the main content area
+            mainContent.addEventListener('scroll', updateActiveLink);
+            
+            // Trigger once on load to set the initial active link
+            updateActiveLink();
+        });
+    </script>
 </body>
 </html>

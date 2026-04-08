@@ -96,12 +96,26 @@
             color: var(--primary-blue);
         }
 
-        .nav-links li a i {
+        .nav-links li a i:first-child {
             width: 24px;
             color: var(--primary-blue);
             margin-right: 12px;
             font-size: 16px;
             text-align: center;
+        }
+
+        /* Sidebar checkmark for completed modules */
+        .nav-links li a .check-icon {
+            margin-left: auto;
+            margin-right: 0;
+            color: var(--accent-green);
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 18px;
+        }
+
+        .nav-links li a.is-completed .check-icon {
+            opacity: 1;
         }
 
         /* MAIN CONTENT AREA */
@@ -120,12 +134,24 @@
             padding: 40px;
             margin-bottom: 40px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: border-color 0.3s;
+        }
+        
+        /* Highlight border when module is completed */
+        .module-section.is-completed {
+            border: 2px solid var(--accent-green);
         }
 
         .module-header {
             border-bottom: 2px solid var(--light-blue);
             padding-bottom: 20px;
             margin-bottom: 30px;
+        }
+
+        .flex-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .module-badge {
@@ -144,6 +170,37 @@
         .module-header h1 {
             font-size: 32px;
             color: var(--dark-blue);
+        }
+
+        /* COMPLETION TOGGLE CSS */
+        .completion-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            background: #f3f2f1;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            border: 1px solid var(--border-color);
+            user-select: none;
+        }
+
+        .completion-toggle:hover {
+            background: #edebe9;
+        }
+
+        .completion-toggle.is-completed {
+            background: #dff6dd;
+            color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .completion-toggle input {
+            display: none; /* hide standard checkbox */
         }
 
         /* ANALYSIS SECTION */
@@ -267,17 +324,17 @@
             <p>Based on the Official Syllabus</p>
         </div>
         <ul class="nav-links">
-            <li><a href="#mod1"><i class="fa-solid fa-id-card"></i> 1. Identity</a></li>
-            <li><a href="#mod2"><i class="fa-solid fa-scale-balanced"></i> 2. Governance</a></li>
-            <li><a href="#mod3"><i class="fa-solid fa-terminal"></i> 3. Azure Administration</a></li>
-            <li><a href="#mod4"><i class="fa-solid fa-network-wired"></i> 4. Virtual Networking</a></li>
-            <li><a href="#mod5"><i class="fa-solid fa-route"></i> 5. Intersite Connectivity</a></li>
-            <li><a href="#mod6"><i class="fa-solid fa-traffic-light"></i> 6. Traffic Management</a></li>
-            <li><a href="#mod7"><i class="fa-solid fa-database"></i> 7. Azure Storage</a></li>
-            <li><a href="#mod8"><i class="fa-solid fa-server"></i> 8. Virtual Machines</a></li>
-            <li><a href="#mod9"><i class="fa-solid fa-cubes"></i> 9. Serverless & Containers</a></li>
-            <li><a href="#mod10"><i class="fa-solid fa-shield-halved"></i> 10. Data Protection</a></li>
-            <li><a href="#mod11"><i class="fa-solid fa-chart-line"></i> 11. Monitoring</a></li>
+            <li><a href="#mod1"><i class="fa-solid fa-id-card"></i> 1. Identity <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod2"><i class="fa-solid fa-scale-balanced"></i> 2. Governance <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod3"><i class="fa-solid fa-terminal"></i> 3. Azure Administration <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod4"><i class="fa-solid fa-network-wired"></i> 4. Virtual Networking <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod5"><i class="fa-solid fa-route"></i> 5. Intersite Connectivity <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod6"><i class="fa-solid fa-traffic-light"></i> 6. Traffic Management <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod7"><i class="fa-solid fa-database"></i> 7. Azure Storage <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod8"><i class="fa-solid fa-server"></i> 8. Virtual Machines <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod9"><i class="fa-solid fa-cubes"></i> 9. Serverless & Containers <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod10"><i class="fa-solid fa-shield-halved"></i> 10. Data Protection <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod11"><i class="fa-solid fa-chart-line"></i> 11. Monitoring <i class="fa-solid fa-circle-check check-icon"></i></a></li>
         </ul>
     </nav>
 
@@ -286,9 +343,15 @@
         
         <!-- MODULE 1 -->
         <section id="mod1" class="module-section">
-            <div class="module-header">
-                <div class="module-badge">Module 1</div>
-                <h1>Manage Identities in Azure</h1>
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 1</div>
+                    <h1>Manage Identities in Azure</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod1">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
             </div>
             <div class="analysis-box">
                 <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
@@ -317,9 +380,15 @@
 
         <!-- MODULE 2 -->
         <section id="mod2" class="module-section">
-            <div class="module-header">
-                <div class="module-badge">Module 2</div>
-                <h1>Governance and Compliance</h1>
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 2</div>
+                    <h1>Governance and Compliance</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod2">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
             </div>
             <div class="analysis-box">
                 <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
@@ -346,11 +415,17 @@
             </div>
         </section>
 
-        <!-- MODULE 3 (NEWLY ADDED) -->
+        <!-- MODULE 3 -->
         <section id="mod3" class="module-section">
-            <div class="module-header">
-                <div class="module-badge">Module 3</div>
-                <h1>Azure Administration</h1>
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 3</div>
+                    <h1>Azure Administration</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod3">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
             </div>
             <div class="analysis-box">
                 <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
@@ -379,9 +454,15 @@
 
         <!-- MODULE 4 -->
         <section id="mod4" class="module-section">
-            <div class="module-header">
-                <div class="module-badge">Module 4</div>
-                <h1>Virtual Networking</h1>
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 4</div>
+                    <h1>Virtual Networking</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod4">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
             </div>
             <div class="analysis-box">
                 <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
@@ -409,9 +490,15 @@
 
         <!-- MODULE 5 -->
         <section id="mod5" class="module-section">
-            <div class="module-header">
-                <div class="module-badge">Module 5</div>
-                <h1>Intersite Connectivity</h1>
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 5</div>
+                    <h1>Intersite Connectivity</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod5">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
             </div>
             <div class="analysis-box">
                 <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
@@ -437,11 +524,17 @@
             </div>
         </section>
 
-        <!-- MODULE 6 (NEWLY ADDED) -->
+        <!-- MODULE 6 -->
         <section id="mod6" class="module-section">
-            <div class="module-header">
-                <div class="module-badge">Module 6</div>
-                <h1>Traffic Management</h1>
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 6</div>
+                    <h1>Traffic Management</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod6">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
             </div>
             <div class="analysis-box">
                 <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
@@ -469,9 +562,15 @@
 
         <!-- MODULE 7 -->
         <section id="mod7" class="module-section">
-            <div class="module-header">
-                <div class="module-badge">Module 7</div>
-                <h1>Azure Storage</h1>
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 7</div>
+                    <h1>Azure Storage</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod7">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
             </div>
             <div class="analysis-box">
                 <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
@@ -498,9 +597,15 @@
 
         <!-- MODULE 8 -->
         <section id="mod8" class="module-section">
-            <div class="module-header">
-                <div class="module-badge">Module 8</div>
-                <h1>Virtual Machines</h1>
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 8</div>
+                    <h1>Virtual Machines</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod8">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
             </div>
             <div class="analysis-box">
                 <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
@@ -526,11 +631,17 @@
             </div>
         </section>
 
-        <!-- MODULE 9 (NEWLY ADDED) -->
+        <!-- MODULE 9 -->
         <section id="mod9" class="module-section">
-            <div class="module-header">
-                <div class="module-badge">Module 9</div>
-                <h1>Serverless & Containers</h1>
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 9</div>
+                    <h1>Serverless & Containers</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod9">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
             </div>
             <div class="analysis-box">
                 <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
@@ -557,11 +668,17 @@
             </div>
         </section>
 
-        <!-- MODULE 10 (NEWLY ADDED/SEPARATED) -->
+        <!-- MODULE 10 -->
         <section id="mod10" class="module-section">
-            <div class="module-header">
-                <div class="module-badge">Module 10</div>
-                <h1>Data Protection</h1>
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 10</div>
+                    <h1>Data Protection</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod10">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
             </div>
             <div class="analysis-box">
                 <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
@@ -588,9 +705,15 @@
 
         <!-- MODULE 11 -->
         <section id="mod11" class="module-section">
-            <div class="module-header">
-                <div class="module-badge">Module 11</div>
-                <h1>Monitoring</h1>
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 11</div>
+                    <h1>Monitoring</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod11">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
             </div>
             <div class="analysis-box">
                 <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
@@ -624,12 +747,56 @@
 
     </main>
 
-    <!-- Scroll Spy Script -->
+    <!-- Scroll Spy and Local Storage Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const mainContent = document.querySelector('.main-content');
             const sections = document.querySelectorAll('.module-section');
             const navLinks = document.querySelectorAll('.nav-links li a');
+            const checkboxes = document.querySelectorAll('.mark-complete-checkbox');
+
+            // --- PROGRESS TRACKING (LOCAL STORAGE) ---
+            
+            // 1. Initialize states from LocalStorage on page load
+            checkboxes.forEach(cb => {
+                const modId = cb.getAttribute('data-module');
+                const isCompleted = localStorage.getItem('az104_progress_' + modId) === 'true';
+                
+                if (isCompleted) {
+                    cb.checked = true;
+                    toggleCompletionUI(modId, true);
+                }
+
+                // 2. Listen for clicks on the checkbox
+                cb.addEventListener('change', (e) => {
+                    const checked = e.target.checked;
+                    localStorage.setItem('az104_progress_' + modId, checked);
+                    toggleCompletionUI(modId, checked);
+                });
+            });
+
+            // 3. Function to visually update the UI when marked complete
+            function toggleCompletionUI(modId, isCompleted) {
+                const section = document.getElementById(modId);
+                const toggleLabel = section.querySelector('.completion-toggle');
+                const toggleText = section.querySelector('.toggle-text');
+                const navLink = document.querySelector(`.nav-links a[href="#${modId}"]`);
+                
+                if (isCompleted) {
+                    section.classList.add('is-completed');
+                    toggleLabel.classList.add('is-completed');
+                    toggleText.innerHTML = '<i class="fa-solid fa-check"></i> Completed';
+                    navLink.classList.add('is-completed');
+                } else {
+                    section.classList.remove('is-completed');
+                    toggleLabel.classList.remove('is-completed');
+                    toggleText.innerHTML = 'Mark as Complete';
+                    navLink.classList.remove('is-completed');
+                }
+            }
+
+
+            // --- SCROLL SPY FUNCTIONALITY ---
 
             function updateActiveLink() {
                 let currentSectionId = '';

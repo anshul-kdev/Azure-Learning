@@ -44,7 +44,13 @@
             display: flex;
             flex-direction: column;
             overflow-y: auto;
+            overflow-x: hidden;
             flex-shrink: 0;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 72px; /* 24px padding + 24px icon + 24px padding */
         }
 
         .sidebar-header {
@@ -54,6 +60,23 @@
             position: sticky;
             top: 0;
             z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            white-space: nowrap;
+        }
+
+        .header-text {
+            display: flex;
+            flex-direction: column;
+            transition: opacity 0.2s, width 0.2s;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .header-text {
+            opacity: 0;
+            width: 0;
+            pointer-events: none;
         }
 
         .sidebar-header h2 {
@@ -65,6 +88,24 @@
             font-size: 13px;
             opacity: 0.8;
             margin-top: 5px;
+            color: #b3d4fc;
+        }
+
+        .sidebar-toggle-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            transition: color 0.2s;
+        }
+
+        .sidebar-toggle-btn:hover {
             color: #b3d4fc;
         }
 
@@ -83,6 +124,7 @@
             font-weight: 600;
             border-left: 4px solid transparent;
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .nav-links li a:hover {
@@ -102,6 +144,24 @@
             margin-right: 12px;
             font-size: 16px;
             text-align: center;
+            transition: margin 0.3s;
+        }
+
+        .nav-text {
+            flex-grow: 1;
+            transition: opacity 0.2s, width 0.2s;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            width: 0;
+            display: none;
+        }
+
+        .sidebar.collapsed .nav-links li a i:first-child {
+            margin-right: 0;
+            font-size: 18px;
         }
 
         /* Sidebar checkmark for completed modules */
@@ -110,12 +170,20 @@
             margin-right: 0;
             color: var(--accent-green);
             opacity: 0;
-            transition: opacity 0.2s;
+            transition: opacity 0.2s, width 0.2s, margin 0.2s;
             font-size: 18px;
+            overflow: hidden;
         }
 
         .nav-links li a.is-completed .check-icon {
             opacity: 1;
+        }
+
+        .sidebar.collapsed .nav-links li a .check-icon {
+            opacity: 0 !important;
+            width: 0;
+            margin: 0;
+            display: none;
         }
 
         /* MAIN CONTENT AREA */
@@ -318,23 +386,28 @@
 <body>
 
     <!-- SIDEBAR -->
-    <nav class="sidebar">
+    <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h2>AZ-104 Study Guide</h2>
-            <p>Based on the Official Syllabus</p>
+            <div class="header-text">
+                <h2>AZ-104 Study Guide</h2>
+                <p>Based on the Official Syllabus</p>
+            </div>
+            <button id="sidebarToggle" class="sidebar-toggle-btn" title="Toggle Sidebar">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
         <ul class="nav-links">
-            <li><a href="#mod1"><i class="fa-solid fa-id-card"></i> 1. Identity <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod2"><i class="fa-solid fa-scale-balanced"></i> 2. Governance <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod3"><i class="fa-solid fa-terminal"></i> 3. Azure Administration <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod4"><i class="fa-solid fa-network-wired"></i> 4. Virtual Networking <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod5"><i class="fa-solid fa-route"></i> 5. Intersite Connectivity <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod6"><i class="fa-solid fa-traffic-light"></i> 6. Traffic Management <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod7"><i class="fa-solid fa-database"></i> 7. Azure Storage <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod8"><i class="fa-solid fa-server"></i> 8. Virtual Machines <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod9"><i class="fa-solid fa-cubes"></i> 9. Serverless & Containers <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod10"><i class="fa-solid fa-shield-halved"></i> 10. Data Protection <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod11"><i class="fa-solid fa-chart-line"></i> 11. Monitoring <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod1" title="1. Identity"><i class="fa-solid fa-id-card"></i> <span class="nav-text">1. Identity</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod2" title="2. Governance"><i class="fa-solid fa-scale-balanced"></i> <span class="nav-text">2. Governance</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod3" title="3. Azure Administration"><i class="fa-solid fa-terminal"></i> <span class="nav-text">3. Azure Administration</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod4" title="4. Virtual Networking"><i class="fa-solid fa-network-wired"></i> <span class="nav-text">4. Virtual Networking</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod5" title="5. Intersite Connectivity"><i class="fa-solid fa-route"></i> <span class="nav-text">5. Intersite Connectivity</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod6" title="6. Traffic Management"><i class="fa-solid fa-traffic-light"></i> <span class="nav-text">6. Traffic Management</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod7" title="7. Azure Storage"><i class="fa-solid fa-database"></i> <span class="nav-text">7. Azure Storage</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod8" title="8. Virtual Machines"><i class="fa-solid fa-server"></i> <span class="nav-text">8. Virtual Machines</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod9" title="9. Serverless & Containers"><i class="fa-solid fa-cubes"></i> <span class="nav-text">9. Serverless & Containers</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod10" title="10. Data Protection"><i class="fa-solid fa-shield-halved"></i> <span class="nav-text">10. Data Protection</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod11" title="11. Monitoring"><i class="fa-solid fa-chart-line"></i> <span class="nav-text">11. Monitoring</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
         </ul>
     </nav>
 
@@ -747,13 +820,29 @@
 
     </main>
 
-    <!-- Scroll Spy and Local Storage Script -->
+    <!-- Scroll Spy, Collapse, and Local Storage Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const mainContent = document.querySelector('.main-content');
             const sections = document.querySelectorAll('.module-section');
             const navLinks = document.querySelectorAll('.nav-links li a');
             const checkboxes = document.querySelectorAll('.mark-complete-checkbox');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+
+            // --- SIDEBAR COLLAPSE FUNCTIONALITY ---
+            
+            // Check local storage for sidebar state
+            if (localStorage.getItem('az104_sidebar_collapsed') === 'true') {
+                sidebar.classList.add('collapsed');
+            }
+
+            // Toggle sidebar on button click
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                localStorage.setItem('az104_sidebar_collapsed', sidebar.classList.contains('collapsed'));
+            });
+
 
             // --- PROGRESS TRACKING (LOCAL STORAGE) ---
             

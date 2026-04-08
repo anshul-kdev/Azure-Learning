@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZ-104T00: Microsoft Azure Administrator Detailed Lab Guide</title>
+    <title>AZ-104: Microsoft Azure Administrator Complete Lab Guide</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&family=Consolas&display=swap" rel="stylesheet">
@@ -65,6 +65,7 @@
             font-size: 13px;
             opacity: 0.8;
             margin-top: 5px;
+            color: #b3d4fc;
         }
 
         .nav-links {
@@ -100,6 +101,7 @@
             color: var(--primary-blue);
             margin-right: 12px;
             font-size: 16px;
+            text-align: center;
         }
 
         /* MAIN CONTENT AREA */
@@ -241,6 +243,19 @@
             border-radius: 0 4px 4px 0;
         }
 
+        /* DISCLAIMER FOOTER */
+        .disclaimer-footer {
+            background-color: #f3f2f1;
+            border-top: 1px solid var(--border-color);
+            padding: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
     </style>
 </head>
 <body>
@@ -248,16 +263,20 @@
     <!-- SIDEBAR -->
     <nav class="sidebar">
         <div class="sidebar-header">
-            <h2>AZ-104T00 Labs</h2>
-            <p>Official Course Breakdown</p>
+            <h2>AZ-104 Study Guide</h2>
+            <p>Based on the Official Syllabus</p>
         </div>
         <ul class="nav-links">
             <li><a href="#mod1"><i class="fa-solid fa-id-card"></i> 1. Identity</a></li>
-            <li><a href="#mod2"><i class="fa-solid fa-scale-balanced"></i> 2. Governance & Policy</a></li>
+            <li><a href="#mod2"><i class="fa-solid fa-scale-balanced"></i> 2. Governance</a></li>
+            <li><a href="#mod3"><i class="fa-solid fa-terminal"></i> 3. Azure Administration</a></li>
             <li><a href="#mod4"><i class="fa-solid fa-network-wired"></i> 4. Virtual Networking</a></li>
             <li><a href="#mod5"><i class="fa-solid fa-route"></i> 5. Intersite Connectivity</a></li>
+            <li><a href="#mod6"><i class="fa-solid fa-traffic-light"></i> 6. Traffic Management</a></li>
             <li><a href="#mod7"><i class="fa-solid fa-database"></i> 7. Azure Storage</a></li>
             <li><a href="#mod8"><i class="fa-solid fa-server"></i> 8. Virtual Machines</a></li>
+            <li><a href="#mod9"><i class="fa-solid fa-cubes"></i> 9. Serverless & Containers</a></li>
+            <li><a href="#mod10"><i class="fa-solid fa-shield-halved"></i> 10. Data Protection</a></li>
             <li><a href="#mod11"><i class="fa-solid fa-chart-line"></i> 11. Monitoring</a></li>
         </ul>
     </nav>
@@ -327,6 +346,37 @@
             </div>
         </section>
 
+        <!-- MODULE 3 (NEWLY ADDED) -->
+        <section id="mod3" class="module-section">
+            <div class="module-header">
+                <div class="module-badge">Module 3</div>
+                <h1>Azure Administration</h1>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>While the Azure Portal (GUI) is great for learning, real-world administration uses automation. This module introduces <strong>Azure PowerShell</strong>, <strong>Azure CLI</strong>, <strong>Azure Cloud Shell</strong>, and <strong>ARM Templates/Bicep</strong>.</p>
+                <p><strong>Why it matters:</strong> Infrastructure as Code (IaC) via ARM templates allows you to deploy 100 identical environments in minutes without human error. Cloud Shell provides a browser-based, authenticated command-line experience without needing to install tools locally.</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Deploy via Cloud Shell & ARM</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Launch Azure Cloud Shell</h4>
+                        <p>Click the <code>>_</code> icon at the top right of the Azure Portal. Select <strong>Bash</strong> (for Azure CLI) and create the required storage if prompted. You now have a terminal directly in your browser.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Deploy a Resource Group via CLI</h4>
+                        <p>In the terminal, type: <code>az group create --name az104-rg3-cli --location eastus</code> and press Enter.</p>
+                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> The terminal will return a JSON block indicating "ProvisioningState": "Succeeded". You just bypassed the GUI to create cloud infrastructure!</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- MODULE 4 -->
         <section id="mod4" class="module-section">
             <div class="module-header">
@@ -382,6 +432,36 @@
                         <h4>Establish the Peering</h4>
                         <p>Go to your <code>Core-VNet</code> (from Module 4). Click <code>Peerings</code> > <code>+ Add</code>. Name it <code>Core-to-Spoke</code>. Under 'Remote virtual network', select your <code>Spoke-VNet</code>. Leave defaults to Allow traffic. Click Add.</p>
                         <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> Azure sets up the routing automatically in both directions. VMs in Core can now ping VMs in Spoke using private IP addresses.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 6 (NEWLY ADDED) -->
+        <section id="mod6" class="module-section">
+            <div class="module-header">
+                <div class="module-badge">Module 6</div>
+                <h1>Traffic Management</h1>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>This module focuses on routing and load balancing network traffic. You will learn about <strong>System Routes</strong>, <strong>User-Defined Routes (UDRs)</strong>, <strong>Azure Load Balancer</strong> (Layer 4), and <strong>Application Gateway</strong> (Layer 7 HTTP/HTTPS).</p>
+                <p><strong>Why it matters:</strong> If you have 3 web servers, you don't want users connecting to just one until it crashes. A Load Balancer distributes incoming internet traffic evenly across all your healthy Virtual Machines.</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Deploy a Public Load Balancer</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Create the Load Balancer</h4>
+                        <p>Search <code>Load balancers</code> > <code>+ Create</code>. Name it <code>az104-lb</code>. Set Type to <strong>Public</strong> and SKU to <strong>Standard</strong>. Under Frontend IP configuration, click "Add a frontend IP" and create a new Public IP address named <code>lb-pip</code>.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Configure Backend Pools and Rules</h4>
+                        <p>Once deployed, open the Load Balancer. Go to <code>Backend pools</code> > <code>+ Add</code>. Add the VNets/VMs you want to balance traffic to. Next, go to <code>Load balancing rules</code>, create a rule for Port 80 to route traffic from the Frontend IP to the Backend Pool.</p>
                     </div>
                 </div>
             </div>
@@ -446,34 +526,101 @@
             </div>
         </section>
 
-        <!-- MODULE 11 -->
-        <section id="mod11" class="module-section">
+        <!-- MODULE 9 (NEWLY ADDED) -->
+        <section id="mod9" class="module-section">
             <div class="module-header">
-                <div class="module-badge">Module 11</div>
-                <h1>Monitoring and Backup</h1>
+                <div class="module-badge">Module 9</div>
+                <h1>Serverless & Containers</h1>
             </div>
             <div class="analysis-box">
                 <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
-                <p>The final pillar of administration is maintaining health. <strong>Azure Monitor</strong> collects metrics and logs. <strong>Log Analytics Workspaces</strong> allow you to query those logs using KQL (Kusto Query Language). You'll also configure <strong>Azure Backup</strong> to create recovery points for VMs.</p>
+                <p>Not every application requires a full Virtual Machine. This module explores Platform-as-a-Service (PaaS) offerings like <strong>Azure App Service</strong> for hosting websites, and <strong>Azure Container Instances (ACI) / AKS</strong> for running Docker containers.</p>
+                <p><strong>Why it matters:</strong> PaaS removes the burden of OS patching and server maintenance. You just bring your code or your container image, and Azure handles the underlying infrastructure.</p>
             </div>
-            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Setup Monitoring & Protection</h2>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Deploy an Azure Container Instance</h2>
             <div class="step-container">
                 <div class="lab-step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h4>Create a Recovery Services Vault</h4>
-                        <p>Search <code>Recovery Services vaults</code> > <code>+ Create</code>. Name it <code>AZ104-Vault</code>. Once created, go to <code>Backup</code>. Select "Azure" and "Virtual Machine". Select a VM you created previously and apply the Default Backup Policy (Daily backups retained for 30 days).</p>
+                        <h4>Create the Container</h4>
+                        <p>Search <code>Container instances</code> > <code>+ Create</code>. Name the container <code>az104-aci</code>. For the Image source, select <strong>Quickstart images</strong>, and choose the <code>mcr.microsoft.com/azuredocs/aci-helloworld</code> image.</p>
                     </div>
                 </div>
                 <div class="lab-step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h4>Configure Azure Monitor Alerts</h4>
-                        <p>Search <code>Monitor</code>. Go to <code>Alerts</code> > <code>+ Create Alert Rule</code>. Select your Subscription/VM as the scope. Choose the Signal <code>Percentage CPU</code>. Set the threshold logic to Greater Than 85%. In the Actions tab, create an Action Group to send an Email to your address. Create the rule.</p>
+                        <h4>Configure Networking</h4>
+                        <p>Under the Networking tab, ensure DNS name label is set to something unique (e.g., <code>az104-app-[yourname]</code>). Keep port 80 open. Click Review + Create.</p>
+                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> Once deployed, copy the FQDN (Fully Qualified Domain Name) from the overview page and paste it into your browser. You will see a live web app running entirely inside a container!</div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- MODULE 10 (NEWLY ADDED/SEPARATED) -->
+        <section id="mod10" class="module-section">
+            <div class="module-header">
+                <div class="module-badge">Module 10</div>
+                <h1>Data Protection</h1>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>Things will fail. Data will be accidentally deleted. This module covers business continuity using <strong>Azure Backup</strong> (for recovering files or entire VMs) and <strong>Azure Site Recovery</strong> (for failing over an entire region to another region during a disaster).</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Backup a Virtual Machine</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Create a Recovery Services Vault</h4>
+                        <p>Search <code>Recovery Services vaults</code> > <code>+ Create</code>. Name it <code>AZ104-Vault</code> and place it in the same region as your existing Virtual Machines.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Configure the Backup Policy</h4>
+                        <p>Open your vault, go to <code>+ Backup</code> under Getting Started. Select "Azure" and "Virtual Machine". Choose the Default Backup Policy (Daily backups at night, retained for 30 days). Add your VM to the policy and enable backup.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 11 -->
+        <section id="mod11" class="module-section">
+            <div class="module-header">
+                <div class="module-badge">Module 11</div>
+                <h1>Monitoring</h1>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>The final pillar of administration is maintaining health. <strong>Azure Monitor</strong> collects metrics and logs. <strong>Log Analytics Workspaces</strong> allow you to query those logs using KQL (Kusto Query Language).</p>
+                <p><strong>Why it matters:</strong> You cannot watch performance charts 24/7. Alert rules automate your responses to degraded performance or failed deployments.</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Setup Azure Monitor Alerts</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Create an Alert Rule</h4>
+                        <p>Search <code>Monitor</code>. Go to <code>Alerts</code> > <code>+ Create Alert Rule</code>. Select a VM you created previously as the scope.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Configure Threshold and Actions</h4>
+                        <p>Choose the Signal <code>Percentage CPU</code>. Set the threshold logic to Greater Than 85%. In the Actions tab, create an Action Group to send an Email to your address. Click Review + Create.</p>
+                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> If that VM's CPU spikes, Azure will automatically email you, allowing you to react before users experience downtime.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEGAL FOOTER -->
+        <div class="disclaimer-footer">
+            <p><strong>Disclaimer:</strong> This website is an independent, unofficial study guide created for educational purposes. It is designed to assist students in preparing for cloud computing certifications. Microsoft, Azure, and AZ-104 are registered trademarks of Microsoft Corporation. This website and its content are not affiliated with, authorized by, endorsed by, or sponsored by Microsoft Corporation in any way.</p>
+        </div>
 
     </main>
 

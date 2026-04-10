@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZ-104: Microsoft Azure Administrator Complete Lab Guide</title>
+    <title>Azure Learning Portal | Certification Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&family=Consolas&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* BASE SETUP */
         :root {
             --primary-blue: #0078d4;
-            --dark-blue: #002050;
-            --light-blue: #eff6fc;
-            --border-color: #edebe9;
-            --text-main: #323130;
-            --text-muted: #605e5c;
-            --sidebar-bg: #f3f2f1;
-            --code-bg: #f8f8f8;
-            --accent-green: #107c10;
+            --primary-hover: #005a9e;
+            --dark-bg: #111827;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --bg-color: #f3f4f6;
         }
 
         * {
@@ -29,891 +29,290 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
             color: var(--text-main);
-            background-color: #faf9f8;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* SIDEBAR NAVIGATION */
-        .sidebar {
-            width: 320px;
-            background-color: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
+            line-height: 1.6;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            overflow-x: hidden;
-            flex-shrink: 0;
-            transition: width 0.3s ease;
         }
 
-        .sidebar.collapsed {
-            width: 72px; /* 24px padding + 24px icon + 24px padding */
-        }
-
-        .sidebar-header {
-            padding: 24px;
-            background-color: var(--dark-blue);
+        /* NAVBAR */
+        .navbar {
+            background-color: var(--dark-bg);
             color: white;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            white-space: nowrap;
+            gap: 10px;
         }
 
-        .header-text {
+        .navbar-brand i {
+            color: #38bdf8;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, #0078d4 0%, #0284c7 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        /* MAIN CONTENT & GRID */
+        .main-container {
+            flex-grow: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--dark-bg);
+            border-bottom: 3px solid var(--primary-blue);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        /* CERTIFICATION CARDS */
+        .cert-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
-            transition: opacity 0.2s, width 0.2s;
-            overflow: hidden;
+            text-decoration: none; /* Make entire card clickable */
+            color: inherit;
         }
 
-        .sidebar.collapsed .header-text {
-            opacity: 0;
-            width: 0;
+        .cert-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #e0f2fe;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-header i {
+            font-size: 4rem;
+            color: var(--primary-blue);
+        }
+
+        .card-body {
+            padding: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cert-badge {
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-size: 0.875rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            align-self: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark-bg);
+        }
+
+        .card-description {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .cert-card:hover .card-action {
+            background-color: var(--primary-hover);
+        }
+
+        /* COMING SOON CARD STYLE */
+        .cert-card.coming-soon {
+            opacity: 0.7;
             pointer-events: none;
         }
-
-        .sidebar-header h2 {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .sidebar-header p {
-            font-size: 13px;
-            opacity: 0.8;
-            margin-top: 5px;
-            color: #b3d4fc;
-        }
-
-        .sidebar-toggle-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            transition: color 0.2s;
-        }
-
-        .sidebar-toggle-btn:hover {
-            color: #b3d4fc;
-        }
-
-        .nav-links {
-            list-style: none;
-            padding: 12px 0;
-        }
-
-        .nav-links li a {
-            display: flex;
-            align-items: center;
-            padding: 12px 24px;
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            border-left: 4px solid transparent;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .nav-links li a:hover {
-            background-color: #edebe9;
-        }
-
-        /* Active State for Scroll Spy */
-        .nav-links li a.active {
-            background-color: #edebe9;
-            border-left: 4px solid var(--primary-blue);
-            color: var(--primary-blue);
-        }
-
-        .nav-links li a i:first-child {
-            width: 24px;
-            color: var(--primary-blue);
-            margin-right: 12px;
-            font-size: 16px;
-            text-align: center;
-            transition: margin 0.3s;
-        }
-
-        .nav-text {
-            flex-grow: 1;
-            transition: opacity 0.2s, width 0.2s;
-            overflow: hidden;
-        }
-
-        .sidebar.collapsed .nav-text {
-            opacity: 0;
-            width: 0;
-            display: none;
-        }
-
-        .sidebar.collapsed .nav-links li a i:first-child {
-            margin-right: 0;
-            font-size: 18px;
-        }
-
-        /* Sidebar checkmark for completed modules */
-        .nav-links li a .check-icon {
-            margin-left: auto;
-            margin-right: 0;
-            color: var(--accent-green);
-            opacity: 0;
-            transition: opacity 0.2s, width 0.2s, margin 0.2s;
-            font-size: 18px;
-            overflow: hidden;
-        }
-
-        .nav-links li a.is-completed .check-icon {
-            opacity: 1;
-        }
-
-        .sidebar.collapsed .nav-links li a .check-icon {
-            opacity: 0 !important;
-            width: 0;
-            margin: 0;
-            display: none;
-        }
-
-        /* MAIN CONTENT AREA */
-        .main-content {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 40px 60px;
-            scroll-behavior: smooth;
-            position: relative;
-        }
-
-        .module-section {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 40px;
-            margin-bottom: 40px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            transition: border-color 0.3s;
+        
+        .cert-card.coming-soon .card-header {
+            background-color: #f3f4f6;
         }
         
-        /* Highlight border when module is completed */
-        .module-section.is-completed {
-            border: 2px solid var(--accent-green);
+        .cert-card.coming-soon .card-header i {
+            color: #9ca3af;
         }
 
-        .module-header {
-            border-bottom: 2px solid var(--light-blue);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+        .cert-card.coming-soon .cert-badge {
+            background-color: #f3f4f6;
+            color: #6b7280;
         }
 
-        .flex-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .cert-card.coming-soon .card-action {
+            background-color: #e5e7eb;
+            color: #9ca3af;
         }
 
-        .module-badge {
-            background-color: var(--light-blue);
-            color: var(--primary-blue);
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: inline-block;
-            margin-bottom: 12px;
-        }
-
-        .module-header h1 {
-            font-size: 32px;
-            color: var(--dark-blue);
-        }
-
-        /* COMPLETION TOGGLE CSS */
-        .completion-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            background: #f3f2f1;
-            padding: 10px 18px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
-            transition: all 0.2s;
-            border: 1px solid var(--border-color);
-            user-select: none;
-        }
-
-        .completion-toggle:hover {
-            background: #edebe9;
-        }
-
-        .completion-toggle.is-completed {
-            background: #dff6dd;
-            color: var(--accent-green);
-            border-color: var(--accent-green);
-        }
-
-        .completion-toggle input {
-            display: none; /* hide standard checkbox */
-        }
-
-        /* ANALYSIS SECTION */
-        .analysis-box {
-            background-color: #fff;
-            border-left: 4px solid var(--primary-blue);
-            padding: 20px 25px;
-            margin-bottom: 30px;
-            background-color: var(--light-blue);
-        }
-
-        .analysis-box h3 {
-            color: var(--primary-blue);
-            margin-bottom: 10px;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .analysis-box p {
-            line-height: 1.6;
-            color: var(--text-main);
-            font-size: 15px;
-            margin-bottom: 10px;
-        }
-
-        /* PRACTICAL STEPS SECTION */
-        .lab-title {
-            font-size: 22px;
-            color: var(--text-main);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .step-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .lab-step {
-            display: flex;
-            gap: 20px;
-            background: white;
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            border-radius: 6px;
-        }
-
-        .step-number {
-            background-color: var(--dark-blue);
+        /* FOOTER */
+        footer {
+            background-color: var(--dark-bg);
             color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            flex-shrink: 0;
-            font-size: 14px;
-        }
-
-        .step-content h4 {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: var(--text-main);
-        }
-
-        .step-content p {
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-
-        .step-content code {
-            font-family: 'Consolas', monospace;
-            background-color: var(--code-bg);
-            padding: 2px 6px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            color: #d13438;
-            font-size: 13px;
-        }
-
-        .success-check {
-            margin-top: 10px;
-            padding: 10px 15px;
-            background-color: #dff6dd;
-            border-left: 3px solid var(--accent-green);
-            font-size: 13px;
-            color: #0f5c0f;
-            border-radius: 0 4px 4px 0;
-        }
-
-        /* DISCLAIMER FOOTER */
-        .disclaimer-footer {
-            background-color: #f3f2f1;
-            border-top: 1px solid var(--border-color);
-            padding: 30px;
             text-align: center;
-            font-size: 12px;
-            color: var(--text-muted);
-            line-height: 1.5;
-            margin-top: 20px;
-            border-radius: 8px;
+            padding: 2rem;
+            margin-top: auto;
         }
 
+        footer p {
+            opacity: 0.7;
+            font-size: 0.875rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .cert-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR -->
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="header-text">
-                <h2>AZ-104 Study Guide</h2>
-                <p>Based on the Official Syllabus</p>
-            </div>
-            <button id="sidebarToggle" class="sidebar-toggle-btn" title="Toggle Sidebar">
-                <i class="fa-solid fa-bars"></i>
-            </button>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fa-brands fa-microsoft"></i> Azure Learning Hub
         </div>
-        <ul class="nav-links">
-            <li><a href="#mod1" title="1. Identity"><i class="fa-solid fa-id-card"></i> <span class="nav-text">1. Identity</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod2" title="2. Governance"><i class="fa-solid fa-scale-balanced"></i> <span class="nav-text">2. Governance</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod3" title="3. Azure Administration"><i class="fa-solid fa-terminal"></i> <span class="nav-text">3. Azure Administration</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod4" title="4. Virtual Networking"><i class="fa-solid fa-network-wired"></i> <span class="nav-text">4. Virtual Networking</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod5" title="5. Intersite Connectivity"><i class="fa-solid fa-route"></i> <span class="nav-text">5. Intersite Connectivity</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod6" title="6. Traffic Management"><i class="fa-solid fa-traffic-light"></i> <span class="nav-text">6. Traffic Management</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod7" title="7. Azure Storage"><i class="fa-solid fa-database"></i> <span class="nav-text">7. Azure Storage</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod8" title="8. Virtual Machines"><i class="fa-solid fa-server"></i> <span class="nav-text">8. Virtual Machines</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod9" title="9. Serverless & Containers"><i class="fa-solid fa-cubes"></i> <span class="nav-text">9. Serverless & Containers</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod10" title="10. Data Protection"><i class="fa-solid fa-shield-halved"></i> <span class="nav-text">10. Data Protection</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-            <li><a href="#mod11" title="11. Monitoring"><i class="fa-solid fa-chart-line"></i> <span class="nav-text">11. Monitoring</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
-        </ul>
+        <div>
+            <a href="https://github.com" target="_blank" style="color: white; text-decoration: none; font-size: 1.5rem;">
+                <i class="fa-brands fa-github"></i>
+            </a>
+        </div>
     </nav>
 
-    <!-- MAIN CONTENT -->
-    <main class="main-content">
+    <!-- Hero Section -->
+    <header class="hero">
+        <h1>Cloud Certification Portal</h1>
+        <p>Interactive study guides, practical lab steps, and theoretical analysis designed to help you pass your Microsoft Azure exams.</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <h2 class="section-title">Available Paths</h2>
         
-        <!-- MODULE 1 -->
-        <section id="mod1" class="module-section">
-            <div class="module-header flex-header">
-                <div>
-                    <div class="module-badge">Module 1</div>
-                    <h1>Manage Identities in Azure</h1>
+        <div class="cert-grid">
+            
+            <!-- AZ-104 CARD (ACTIVE) -->
+            <!-- Note the href correctly targets the sub-pages folder based on your GitHub repo structure -->
+            <a href="sub-pages/Az-104/index.html" class="cert-card">
+                <div class="card-header">
+                    <i class="fa-solid fa-server"></i>
                 </div>
-                <label class="completion-toggle">
-                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod1">
-                    <span class="toggle-text">Mark as Complete</span>
-                </label>
-            </div>
-            <div class="analysis-box">
-                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
-                <p>This module introduces <strong>Microsoft Entra ID</strong> (formerly Azure Active Directory). Unlike on-premises Windows AD which relies on Kerberos, Entra ID is an Identity-as-a-Service (IDaaS) built for the cloud using protocols like SAML and OAuth 2.0.</p>
-                <p><strong>Why it matters:</strong> Before you can build anything in Azure, you must define <em>who</em> is allowed to build it. You will learn the difference between direct assignment and dynamic groups (where users are automatically added based on properties like 'Department').</p>
-            </div>
-            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Manage Entra ID</h2>
-            <div class="step-container">
-                <div class="lab-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Create a New User</h4>
-                        <p>Navigate to <code>Microsoft Entra ID</code> > <code>Users</code> > <code>+ New user</code>. Enter the UPN as <code>az104-admin@yourdomain.onmicrosoft.com</code>. Fill in the Display Name and Job Title (e.g., "IT Manager"). Auto-generate the password and save it.</p>
+                <div class="card-body">
+                    <span class="cert-badge">Associate Level</span>
+                    <h3 class="card-title">AZ-104: Azure Administrator</h3>
+                    <p class="card-description">Master identity, governance, storage, compute, and virtual networks. Learn how to provision, monitor, and adjust cloud resources.</p>
+                    <div class="card-action">
+                        Start Learning <i class="fa-solid fa-arrow-right"></i>
                     </div>
                 </div>
-                <div class="lab-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Create a Dynamic Group</h4>
-                        <p>Go to <code>Groups</code> > <code>+ New group</code>. Change Group type to Security. Change Membership type to <code>Dynamic User</code>. Click <code>Add dynamic query</code> and set the rule: <code>jobTitle -eq "IT Manager"</code>.</p>
-                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> Your newly created user will automatically appear in this group after a few minutes, demonstrating zero-touch administration.</div>
+            </a>
+<!-- 
+            <!-- AZ-900 CARD (PLACEHOLDER FOR FUTURE) -->
+            <div class="cert-card coming-soon">
+                <div class="card-header">
+                    <i class="fa-solid fa-cloud"></i>
+                </div>
+                <div class="card-body">
+                    <span class="cert-badge">Fundamentals Level</span>
+                    <h3 class="card-title">AZ-900: Azure Fundamentals</h3>
+                    <p class="card-description">Understand foundational cloud concepts, core Azure services, and basic management and governance features.</p>
+                    <div class="card-action">
+                        Coming Soon <i class="fa-solid fa-lock"></i>
                     </div>
                 </div>
-            </div>
-        </section>
+            </div> -->
 
-        <!-- MODULE 2 -->
-        <section id="mod2" class="module-section">
-            <div class="module-header flex-header">
-                <div>
-                    <div class="module-badge">Module 2</div>
-                    <h1>Governance and Compliance</h1>
+             <!-- AZ-500 CARD (PLACEHOLDER FOR FUTURE)
+             <div class="cert-card coming-soon">
+                <div class="card-header">
+                    <i class="fa-solid fa-shield-halved"></i>
                 </div>
-                <label class="completion-toggle">
-                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod2">
-                    <span class="toggle-text">Mark as Complete</span>
-                </label>
-            </div>
-            <div class="analysis-box">
-                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
-                <p>Governance ensures your cloud environment is secure and cost-effective. This module covers <strong>RBAC (Role-Based Access Control)</strong> to control <em>what</em> users can do, and <strong>Azure Policy</strong> to control <em>how</em> resources are deployed.</p>
-                <p><strong>Why it matters:</strong> RBAC prevents junior admins from deleting production databases. Azure Policy prevents developers from deploying expensive resources in unauthorized geographical regions (e.g., forcing all deployments to stay in "East US" for compliance data residency laws).</p>
-            </div>
-            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Implement Azure Policy & RBAC</h2>
-            <div class="step-container">
-                <div class="lab-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Create a Management Group</h4>
-                        <p>Search for <code>Management groups</code>. Click <code>+ Create</code>. Name it <code>AZ104-Governance</code>. Move your current Subscription into this new Management Group. This allows you to apply policies to multiple subscriptions at once.</p>
-                    </div>
-                </div>
-                <div class="lab-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Apply an "Allowed Locations" Policy</h4>
-                        <p>Search for <code>Policy</code>. Go to <code>Assignments</code> > <code>Assign policy</code>. Set the Scope to your Subscription. Search for the built-in policy definition <code>Allowed locations</code>. In parameters, select only <code>East US</code>. Click Create.</p>
-                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> Try to create a Storage Account in "West Europe". The portal will block you with a "Policy Violation" error, proving your governance works.</div>
+                <div class="card-body">
+                    <span class="cert-badge">Associate Level</span>
+                    <h3 class="card-title">AZ-500: Azure Security Engineer</h3>
+                    <p class="card-description">Implement security controls, maintain security posture, and protect identity, access, data, applications, and networks.</p>
+                    <div class="card-action">
+                        Coming Soon <i class="fa-solid fa-lock"></i>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- MODULE 3 -->
-        <section id="mod3" class="module-section">
-            <div class="module-header flex-header">
-                <div>
-                    <div class="module-badge">Module 3</div>
-                    <h1>Azure Administration</h1>
-                </div>
-                <label class="completion-toggle">
-                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod3">
-                    <span class="toggle-text">Mark as Complete</span>
-                </label>
-            </div>
-            <div class="analysis-box">
-                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
-                <p>While the Azure Portal (GUI) is great for learning, real-world administration uses automation. This module introduces <strong>Azure PowerShell</strong>, <strong>Azure CLI</strong>, <strong>Azure Cloud Shell</strong>, and <strong>ARM Templates/Bicep</strong>.</p>
-                <p><strong>Why it matters:</strong> Infrastructure as Code (IaC) via ARM templates allows you to deploy 100 identical environments in minutes without human error. Cloud Shell provides a browser-based, authenticated command-line experience without needing to install tools locally.</p>
-            </div>
-            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Deploy via Cloud Shell & ARM</h2>
-            <div class="step-container">
-                <div class="lab-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Launch Azure Cloud Shell</h4>
-                        <p>Click the <code>>_</code> icon at the top right of the Azure Portal. Select <strong>Bash</strong> (for Azure CLI) and create the required storage if prompted. You now have a terminal directly in your browser.</p>
-                    </div>
-                </div>
-                <div class="lab-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Deploy a Resource Group via CLI</h4>
-                        <p>In the terminal, type: <code>az group create --name az104-rg3-cli --location eastus</code> and press Enter.</p>
-                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> The terminal will return a JSON block indicating "ProvisioningState": "Succeeded". You just bypassed the GUI to create cloud infrastructure!</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- MODULE 4 -->
-        <section id="mod4" class="module-section">
-            <div class="module-header flex-header">
-                <div>
-                    <div class="module-badge">Module 4</div>
-                    <h1>Virtual Networking</h1>
-                </div>
-                <label class="completion-toggle">
-                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod4">
-                    <span class="toggle-text">Mark as Complete</span>
-                </label>
-            </div>
-            <div class="analysis-box">
-                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
-                <p>Virtual Networks (VNets) are the core foundation of Azure IaaS. You will learn about IP Addressing (CIDR blocks), Subnets, and Network Security Groups (NSGs).</p>
-                <p><strong>Why it matters:</strong> A VNet is isolated by default. Subnets break the VNet down into manageable chunks (e.g., Frontend, Backend, Database). NSGs act as virtual firewalls attached to subnets or network interfaces to filter traffic (Allow Port 80, Block Port 3389).</p>
-            </div>
-            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Build a Secure VNet</h2>
-            <div class="step-container">
-                <div class="lab-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Create a VNet with Subnets</h4>
-                        <p>Search <code>Virtual networks</code> > <code>+ Create</code>. Name it <code>Core-VNet</code>. Under IP Addresses, set the IPv4 address space to <code>10.1.0.0/16</code>. Add two subnets: <code>Frontend (10.1.0.0/24)</code> and <code>Backend (10.1.1.0/24)</code>.</p>
-                    </div>
-                </div>
-                <div class="lab-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Configure a Network Security Group (NSG)</h4>
-                        <p>Search <code>Network security groups</code> > <code>+ Create</code>. Name it <code>Frontend-NSG</code>. Open it, go to <code>Inbound security rules</code>. Add a rule: Source: Any, Destination Port: <code>80</code>, Protocol: TCP, Action: <code>Allow</code>. Associate this NSG with the <code>Frontend</code> subnet.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- MODULE 5 -->
-        <section id="mod5" class="module-section">
-            <div class="module-header flex-header">
-                <div>
-                    <div class="module-badge">Module 5</div>
-                    <h1>Intersite Connectivity</h1>
-                </div>
-                <label class="completion-toggle">
-                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod5">
-                    <span class="toggle-text">Mark as Complete</span>
-                </label>
-            </div>
-            <div class="analysis-box">
-                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
-                <p>By default, resources in different VNets cannot communicate. This module teaches <strong>VNet Peering</strong>, which routes traffic between VNets via Microsoft's private backbone, and <strong>VPN Gateways</strong> for connecting your on-premises office to Azure.</p>
-            </div>
-            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Global VNet Peering</h2>
-            <div class="step-container">
-                <div class="lab-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Create a Second VNet</h4>
-                        <p>Create another Virtual Network named <code>Spoke-VNet</code> in a <strong>different region</strong> (e.g., West US). Give it a non-overlapping IP space: <code>10.2.0.0/16</code>.</p>
-                    </div>
-                </div>
-                <div class="lab-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Establish the Peering</h4>
-                        <p>Go to your <code>Core-VNet</code> (from Module 4). Click <code>Peerings</code> > <code>+ Add</code>. Name it <code>Core-to-Spoke</code>. Under 'Remote virtual network', select your <code>Spoke-VNet</code>. Leave defaults to Allow traffic. Click Add.</p>
-                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> Azure sets up the routing automatically in both directions. VMs in Core can now ping VMs in Spoke using private IP addresses.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- MODULE 6 -->
-        <section id="mod6" class="module-section">
-            <div class="module-header flex-header">
-                <div>
-                    <div class="module-badge">Module 6</div>
-                    <h1>Traffic Management</h1>
-                </div>
-                <label class="completion-toggle">
-                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod6">
-                    <span class="toggle-text">Mark as Complete</span>
-                </label>
-            </div>
-            <div class="analysis-box">
-                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
-                <p>This module focuses on routing and load balancing network traffic. You will learn about <strong>System Routes</strong>, <strong>User-Defined Routes (UDRs)</strong>, <strong>Azure Load Balancer</strong> (Layer 4), and <strong>Application Gateway</strong> (Layer 7 HTTP/HTTPS).</p>
-                <p><strong>Why it matters:</strong> If you have 3 web servers, you don't want users connecting to just one until it crashes. A Load Balancer distributes incoming internet traffic evenly across all your healthy Virtual Machines.</p>
-            </div>
-            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Deploy a Public Load Balancer</h2>
-            <div class="step-container">
-                <div class="lab-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Create the Load Balancer</h4>
-                        <p>Search <code>Load balancers</code> > <code>+ Create</code>. Name it <code>az104-lb</code>. Set Type to <strong>Public</strong> and SKU to <strong>Standard</strong>. Under Frontend IP configuration, click "Add a frontend IP" and create a new Public IP address named <code>lb-pip</code>.</p>
-                    </div>
-                </div>
-                <div class="lab-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Configure Backend Pools and Rules</h4>
-                        <p>Once deployed, open the Load Balancer. Go to <code>Backend pools</code> > <code>+ Add</code>. Add the VNets/VMs you want to balance traffic to. Next, go to <code>Load balancing rules</code>, create a rule for Port 80 to route traffic from the Frontend IP to the Backend Pool.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- MODULE 7 -->
-        <section id="mod7" class="module-section">
-            <div class="module-header flex-header">
-                <div>
-                    <div class="module-badge">Module 7</div>
-                    <h1>Azure Storage</h1>
-                </div>
-                <label class="completion-toggle">
-                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod7">
-                    <span class="toggle-text">Mark as Complete</span>
-                </label>
-            </div>
-            <div class="analysis-box">
-                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
-                <p>Azure Storage is Microsoft's managed storage solution. This module dives into the Storage Account architecture, focusing heavily on <strong>Blobs</strong> (for massive unstructured data), <strong>Azure Files</strong> (for standard SMB file shares), and Storage Tiers (Hot, Cool, Archive).</p>
-            </div>
-            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Manage Data & File Shares</h2>
-            <div class="step-container">
-                <div class="lab-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Deploy a Storage Account</h4>
-                        <p>Search <code>Storage accounts</code> > <code>+ Create</code>. Name it uniquely (e.g., <code>az104store[date]</code>). Choose Standard performance and <code>Geo-redundant storage (GRS)</code>. Create.</p>
-                    </div>
-                </div>
-                <div class="lab-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Map an Azure File Share</h4>
-                        <p>Open the Storage Account. Go to <code>File shares</code> > <code>+ File share</code>. Name it <code>corp-share</code>. Open the share, click <code>Connect</code> at the top. Select the 'Windows' tab and copy the provided PowerShell script. Run this script on your local Windows PC to mount the Azure cloud drive as your local Z: drive.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- MODULE 8 -->
-        <section id="mod8" class="module-section">
-            <div class="module-header flex-header">
-                <div>
-                    <div class="module-badge">Module 8</div>
-                    <h1>Virtual Machines</h1>
-                </div>
-                <label class="completion-toggle">
-                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod8">
-                    <span class="toggle-text">Mark as Complete</span>
-                </label>
-            </div>
-            <div class="analysis-box">
-                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
-                <p>VMs are the workhorse of the cloud. This module moves past simple VM creation and focuses on <strong>High Availability</strong>. You will learn about Availability Sets (protecting against local rack failures) and Availability Zones (protecting against entire datacenter failures), as well as VM Scale Sets (VMSS) for auto-scaling.</p>
-            </div>
-            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Deploy Scalable Compute</h2>
-            <div class="step-container">
-                <div class="lab-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Deploy a VM Scale Set</h4>
-                        <p>Search <code>Virtual machine scale sets</code> > <code>+ Create</code>. Name it <code>Web-VMSS</code>. Choose Windows Server. In the <code>Scaling</code> tab, set the Initial instance count to <code>2</code>. Set the scaling policy to <code>Custom</code>.</p>
-                    </div>
-                </div>
-                <div class="lab-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Configure Auto-Scale Rules</h4>
-                        <p>In the scaling rules, set the minimum instances to 1, and maximum to 5. Set the rule to "Scale out (increase by 1)" when CPU > 75% for 10 minutes. Click Create.</p>
-                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> You now have a fleet of VMs that will automatically grow during peak traffic times and shrink overnight to save costs.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- MODULE 9 -->
-        <section id="mod9" class="module-section">
-            <div class="module-header flex-header">
-                <div>
-                    <div class="module-badge">Module 9</div>
-                    <h1>Serverless & Containers</h1>
-                </div>
-                <label class="completion-toggle">
-                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod9">
-                    <span class="toggle-text">Mark as Complete</span>
-                </label>
-            </div>
-            <div class="analysis-box">
-                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
-                <p>Not every application requires a full Virtual Machine. This module explores Platform-as-a-Service (PaaS) offerings like <strong>Azure App Service</strong> for hosting websites, and <strong>Azure Container Instances (ACI) / AKS</strong> for running Docker containers.</p>
-                <p><strong>Why it matters:</strong> PaaS removes the burden of OS patching and server maintenance. You just bring your code or your container image, and Azure handles the underlying infrastructure.</p>
-            </div>
-            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Deploy an Azure Container Instance</h2>
-            <div class="step-container">
-                <div class="lab-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Create the Container</h4>
-                        <p>Search <code>Container instances</code> > <code>+ Create</code>. Name the container <code>az104-aci</code>. For the Image source, select <strong>Quickstart images</strong>, and choose the <code>mcr.microsoft.com/azuredocs/aci-helloworld</code> image.</p>
-                    </div>
-                </div>
-                <div class="lab-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Configure Networking</h4>
-                        <p>Under the Networking tab, ensure DNS name label is set to something unique (e.g., <code>az104-app-[yourname]</code>). Keep port 80 open. Click Review + Create.</p>
-                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> Once deployed, copy the FQDN (Fully Qualified Domain Name) from the overview page and paste it into your browser. You will see a live web app running entirely inside a container!</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- MODULE 10 -->
-        <section id="mod10" class="module-section">
-            <div class="module-header flex-header">
-                <div>
-                    <div class="module-badge">Module 10</div>
-                    <h1>Data Protection</h1>
-                </div>
-                <label class="completion-toggle">
-                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod10">
-                    <span class="toggle-text">Mark as Complete</span>
-                </label>
-            </div>
-            <div class="analysis-box">
-                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
-                <p>Things will fail. Data will be accidentally deleted. This module covers business continuity using <strong>Azure Backup</strong> (for recovering files or entire VMs) and <strong>Azure Site Recovery</strong> (for failing over an entire region to another region during a disaster).</p>
-            </div>
-            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Backup a Virtual Machine</h2>
-            <div class="step-container">
-                <div class="lab-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Create a Recovery Services Vault</h4>
-                        <p>Search <code>Recovery Services vaults</code> > <code>+ Create</code>. Name it <code>AZ104-Vault</code> and place it in the same region as your existing Virtual Machines.</p>
-                    </div>
-                </div>
-                <div class="lab-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Configure the Backup Policy</h4>
-                        <p>Open your vault, go to <code>+ Backup</code> under Getting Started. Select "Azure" and "Virtual Machine". Choose the Default Backup Policy (Daily backups at night, retained for 30 days). Add your VM to the policy and enable backup.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- MODULE 11 -->
-        <section id="mod11" class="module-section">
-            <div class="module-header flex-header">
-                <div>
-                    <div class="module-badge">Module 11</div>
-                    <h1>Monitoring</h1>
-                </div>
-                <label class="completion-toggle">
-                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod11">
-                    <span class="toggle-text">Mark as Complete</span>
-                </label>
-            </div>
-            <div class="analysis-box">
-                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
-                <p>The final pillar of administration is maintaining health. <strong>Azure Monitor</strong> collects metrics and logs. <strong>Log Analytics Workspaces</strong> allow you to query those logs using KQL (Kusto Query Language).</p>
-                <p><strong>Why it matters:</strong> You cannot watch performance charts 24/7. Alert rules automate your responses to degraded performance or failed deployments.</p>
-            </div>
-            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Setup Azure Monitor Alerts</h2>
-            <div class="step-container">
-                <div class="lab-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Create an Alert Rule</h4>
-                        <p>Search <code>Monitor</code>. Go to <code>Alerts</code> > <code>+ Create Alert Rule</code>. Select a VM you created previously as the scope.</p>
-                    </div>
-                </div>
-                <div class="lab-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Configure Threshold and Actions</h4>
-                        <p>Choose the Signal <code>Percentage CPU</code>. Set the threshold logic to Greater Than 85%. In the Actions tab, create an Action Group to send an Email to your address. Click Review + Create.</p>
-                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> If that VM's CPU spikes, Azure will automatically email you, allowing you to react before users experience downtime.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- LEGAL FOOTER -->
-        <div class="disclaimer-footer">
-            <p><strong>Disclaimer:</strong> This website is an independent, unofficial study guide created for educational purposes. It is designed to assist students in preparing for cloud computing certifications. Microsoft, Azure, and AZ-104 are registered trademarks of Microsoft Corporation. This website and its content are not affiliated with, authorized by, endorsed by, or sponsored by Microsoft Corporation in any way.</p>
-        </div>
-
+        </div> -->
     </main>
 
-    <!-- Scroll Spy, Collapse, and Local Storage Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const mainContent = document.querySelector('.main-content');
-            const sections = document.querySelectorAll('.module-section');
-            const navLinks = document.querySelectorAll('.nav-links li a');
-            const checkboxes = document.querySelectorAll('.mark-complete-checkbox');
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.getElementById('sidebarToggle');
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Azure Learning Hub. This is an independent study project.</p>
+        <p style="margin-top: 5px;">Microsoft, Azure, and associated certification titles are registered trademarks of Microsoft Corporation.</p>
+    </footer>
 
-            // --- SIDEBAR COLLAPSE FUNCTIONALITY ---
-            
-            // Check local storage for sidebar state
-            if (localStorage.getItem('az104_sidebar_collapsed') === 'true') {
-                sidebar.classList.add('collapsed');
-            }
-
-            // Toggle sidebar on button click
-            sidebarToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
-                localStorage.setItem('az104_sidebar_collapsed', sidebar.classList.contains('collapsed'));
-            });
-
-
-            // --- PROGRESS TRACKING (LOCAL STORAGE) ---
-            
-            // 1. Initialize states from LocalStorage on page load
-            checkboxes.forEach(cb => {
-                const modId = cb.getAttribute('data-module');
-                const isCompleted = localStorage.getItem('az104_progress_' + modId) === 'true';
-                
-                if (isCompleted) {
-                    cb.checked = true;
-                    toggleCompletionUI(modId, true);
-                }
-
-                // 2. Listen for clicks on the checkbox
-                cb.addEventListener('change', (e) => {
-                    const checked = e.target.checked;
-                    localStorage.setItem('az104_progress_' + modId, checked);
-                    toggleCompletionUI(modId, checked);
-                });
-            });
-
-            // 3. Function to visually update the UI when marked complete
-            function toggleCompletionUI(modId, isCompleted) {
-                const section = document.getElementById(modId);
-                const toggleLabel = section.querySelector('.completion-toggle');
-                const toggleText = section.querySelector('.toggle-text');
-                const navLink = document.querySelector(`.nav-links a[href="#${modId}"]`);
-                
-                if (isCompleted) {
-                    section.classList.add('is-completed');
-                    toggleLabel.classList.add('is-completed');
-                    toggleText.innerHTML = '<i class="fa-solid fa-check"></i> Completed';
-                    navLink.classList.add('is-completed');
-                } else {
-                    section.classList.remove('is-completed');
-                    toggleLabel.classList.remove('is-completed');
-                    toggleText.innerHTML = 'Mark as Complete';
-                    navLink.classList.remove('is-completed');
-                }
-            }
-
-
-            // --- SCROLL SPY FUNCTIONALITY ---
-
-            function updateActiveLink() {
-                let currentSectionId = '';
-                
-                // Determine which section is currently in view
-                sections.forEach(section => {
-                    // Check if the scroll position is past the top of the section (minus a 150px buffer for better UX)
-                    const sectionTop = section.offsetTop - mainContent.offsetTop;
-                    if (mainContent.scrollTop >= sectionTop - 150) {
-                        currentSectionId = section.getAttribute('id');
-                    }
-                });
-
-                // Apply active class to the corresponding navigation link
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${currentSectionId}`) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-
-            // Listen for scrolling in the main content area
-            mainContent.addEventListener('scroll', updateActiveLink);
-            
-            // Trigger once on load to set the initial active link
-            updateActiveLink();
-        });
-    </script>
 </body>
 </html>

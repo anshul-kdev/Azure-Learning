@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Dive: Microsoft Entra ID | AZ-104</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0078d4;
+            --dark-bg: #111827;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .header-section {
+            margin-bottom: 3rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1.5rem;
+        }
+
+        .badge {
+            background-color: #e0f2fe;
+            color: var(--primary-blue);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--dark-bg);
+            margin: 0 0 1rem 0;
+        }
+
+        p.lead {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Content Blocks */
+        .content-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .content-card h2 {
+            color: var(--dark-bg);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .note-box {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+            color: #92400e;
+        }
+
+        .note-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        code {
+            background-color: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            color: #0369a1;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="../index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to AZ-104 Hub</a>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <span class="badge">Module 1 Deep Dive</span>
+            <h1>Microsoft Entra ID (Azure AD)</h1>
+            <p class="lead">Master user identities, group management, and administrative units.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>Understanding the Identity Perimeter</h2>
+            <p>In modern cloud architecture, the network firewall is no longer the primary security boundary. <strong>Identity is the new perimeter.</strong> Entra ID is a multi-tenant, cloud-based directory and identity management service.</p>
+            
+            <div class="note-box">
+                <strong>Exam Tip:</strong>
+                <p>Know the difference between Windows Server Active Directory (uses Kerberos/NTLM, requires domain controllers) and Entra ID (uses HTTP/HTTPS protocols like SAML, WS-Federation, and OAuth 2.0).</p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>User and Group Management Concepts</h2>
+            <p>Managing access at scale requires understanding the difference between user assignment types:</p>
+            <ul>
+                <li><strong>Assigned (Direct):</strong> You manually add a specific user to a group or assign a role directly. This is hard to maintain at scale.</li>
+                <li><strong>Dynamic User:</strong> Users are automatically added or removed from a group based on their user attributes (e.g., <code>user.department -eq "Sales"</code>).</li>
+                <li><strong>Dynamic Device:</strong> Devices are grouped automatically based on OS, version, or ownership (Requires Intune/Entra ID P1).</li>
+            </ul>
+        </div>
+
+        <div class="content-card">
+            <h2>Advanced Lab: Bulk User Import</h2>
+            <p>In the real world, you rarely create users one by one. You will use a CSV template to bulk create identities.</p>
+            <ol>
+                <li>In the Azure Portal, search for <code>Microsoft Entra ID</code>.</li>
+                <li>Navigate to <strong>Users</strong> > <strong>All users</strong>.</li>
+                <li>At the top menu, click <strong>Bulk operations</strong> > <strong>Bulk create</strong>.</li>
+                <li>Download the provided CSV template.</li>
+                <li>Fill out the CSV with user Principal Names (e.g., <code>user1@yourtenant.onmicrosoft.com</code>), Display Names, and initial Passwords.</li>
+                <li>Upload the file and click <strong>Submit</strong>. Wait for the notification indicating success.</li>
+            </ol>
+        </div>
+
+    </div>
+</body>
+</html>

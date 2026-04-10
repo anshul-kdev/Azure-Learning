@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AZ-104: Microsoft Azure Administrator Complete Lab Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&family=Consolas&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0078d4;
+            --dark-blue: #002050;
+            --light-blue: #eff6fc;
+            --border-color: #edebe9;
+            --text-main: #323130;
+            --text-muted: #605e5c;
+            --sidebar-bg: #f3f2f1;
+            --code-bg: #f8f8f8;
+            --accent-green: #107c10;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-main);
+            background-color: #faf9f8;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR NAVIGATION */
+        .sidebar {
+            width: 320px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            flex-shrink: 0;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 72px;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            background-color: var(--dark-blue);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            white-space: nowrap;
+        }
+
+        .header-text {
+            display: flex;
+            flex-direction: column;
+            transition: opacity 0.2s, width 0.2s;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .header-text {
+            opacity: 0;
+            width: 0;
+            pointer-events: none;
+        }
+
+        .sidebar-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-header p {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-top: 5px;
+            color: #b3d4fc;
+        }
+
+        .sidebar-toggle-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            transition: color 0.2s;
+        }
+
+        .sidebar-toggle-btn:hover {
+            color: #b3d4fc;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 12px 0;
+        }
+
+        .nav-links li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-links li a:hover {
+            background-color: #edebe9;
+        }
+
+        .nav-links li a.active {
+            background-color: #edebe9;
+            border-left: 4px solid var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .nav-links li a i:first-child {
+            width: 24px;
+            color: var(--primary-blue);
+            margin-right: 12px;
+            font-size: 16px;
+            text-align: center;
+            transition: margin 0.3s;
+        }
+
+        .nav-text {
+            flex-grow: 1;
+            transition: opacity 0.2s, width 0.2s;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            width: 0;
+            display: none;
+        }
+
+        .sidebar.collapsed .nav-links li a i:first-child {
+            margin-right: 0;
+            font-size: 18px;
+        }
+
+        .nav-links li a .check-icon {
+            margin-left: auto;
+            margin-right: 0;
+            color: var(--accent-green);
+            opacity: 0;
+            transition: opacity 0.2s, width 0.2s, margin 0.2s;
+            font-size: 18px;
+            overflow: hidden;
+        }
+
+        .nav-links li a.is-completed .check-icon {
+            opacity: 1;
+        }
+
+        .sidebar.collapsed .nav-links li a .check-icon {
+            opacity: 0 !important;
+            width: 0;
+            margin: 0;
+            display: none;
+        }
+
+        /* MAIN CONTENT AREA */
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 40px 60px;
+            scroll-behavior: smooth;
+            position: relative;
+        }
+
+        .back-to-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .back-to-home:hover {
+            text-decoration: underline;
+        }
+
+        .module-section {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: border-color 0.3s;
+        }
+        
+        .module-section.is-completed {
+            border: 2px solid var(--accent-green);
+        }
+
+        .module-header {
+            border-bottom: 2px solid var(--light-blue);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .flex-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .module-badge {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .module-header h1 {
+            font-size: 32px;
+            color: var(--dark-blue);
+        }
+
+        /* COMPLETION TOGGLE CSS */
+        .completion-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            background: #f3f2f1;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            border: 1px solid var(--border-color);
+            user-select: none;
+        }
+
+        .completion-toggle:hover {
+            background: #edebe9;
+        }
+
+        .completion-toggle.is-completed {
+            background: #dff6dd;
+            color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .completion-toggle input {
+            display: none;
+        }
+
+        /* DEEP DIVE BUTTON */
+        .deep-dive-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 25px;
+            transition: background-color 0.2s;
+            border: none;
+        }
+        .deep-dive-btn:hover {
+            background-color: var(--dark-blue);
+        }
+
+        .analysis-box {
+            background-color: #fff;
+            border-left: 4px solid var(--primary-blue);
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            background-color: var(--light-blue);
+        }
+
+        .analysis-box h3 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .analysis-box p {
+            line-height: 1.6;
+            color: var(--text-main);
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .lab-title {
+            font-size: 22px;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .lab-step {
+            display: flex;
+            gap: 20px;
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .step-number {
+            background-color: var(--dark-blue);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .step-content h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .step-content p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .step-content code {
+            font-family: 'Consolas', monospace;
+            background-color: var(--code-bg);
+            padding: 2px 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: #d13438;
+            font-size: 13px;
+        }
+
+        .success-check {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #dff6dd;
+            border-left: 3px solid var(--accent-green);
+            font-size: 13px;
+            color: #0f5c0f;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .disclaimer-footer {
+            background-color: #f3f2f1;
+            border-top: 1px solid var(--border-color);
+            padding: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="header-text">
+                <h2>AZ-104 Study Guide</h2>
+                <p>Based on the Official Syllabus</p>
+            </div>
+            <button id="sidebarToggle" class="sidebar-toggle-btn" title="Toggle Sidebar">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#mod1" title="1. Identity"><i class="fa-solid fa-id-card"></i> <span class="nav-text">1. Identity</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod2" title="2. Governance"><i class="fa-solid fa-scale-balanced"></i> <span class="nav-text">2. Governance</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod3" title="3. Azure Administration"><i class="fa-solid fa-terminal"></i> <span class="nav-text">3. Azure Administration</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod4" title="4. Virtual Networking"><i class="fa-solid fa-network-wired"></i> <span class="nav-text">4. Virtual Networking</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod5" title="5. Intersite Connectivity"><i class="fa-solid fa-route"></i> <span class="nav-text">5. Intersite Connectivity</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod6" title="6. Traffic Management"><i class="fa-solid fa-traffic-light"></i> <span class="nav-text">6. Traffic Management</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod7" title="7. Azure Storage"><i class="fa-solid fa-database"></i> <span class="nav-text">7. Azure Storage</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod8" title="8. Virtual Machines"><i class="fa-solid fa-server"></i> <span class="nav-text">8. Virtual Machines</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod9" title="9. Serverless & Containers"><i class="fa-solid fa-cubes"></i> <span class="nav-text">9. Serverless & Containers</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod10" title="10. Data Protection"><i class="fa-solid fa-shield-halved"></i> <span class="nav-text">10. Data Protection</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+            <li><a href="#mod11" title="11. Monitoring"><i class="fa-solid fa-chart-line"></i> <span class="nav-text">11. Monitoring</span> <i class="fa-solid fa-circle-check check-icon"></i></a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        
+        <a href="../../index.html" class="back-to-home"><i class="fa-solid fa-arrow-left"></i> Back to Main Hub</a>
+
+        <!-- MODULE 1 -->
+        <section id="mod1" class="module-section">
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 1</div>
+                    <h1>Manage Identities in Azure</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod1">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>This module introduces <strong>Microsoft Entra ID</strong> (formerly Azure Active Directory). Unlike on-premises Windows AD which relies on Kerberos, Entra ID is an Identity-as-a-Service (IDaaS) built for the cloud using protocols like SAML and OAuth 2.0.</p>
+                <p><strong>Why it matters:</strong> Before you can build anything in Azure, you must define <em>who</em> is allowed to build it. You will learn the difference between direct assignment and dynamic groups (where users are automatically added based on properties like 'Department').</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Manage Entra ID</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Create a New User</h4>
+                        <p>Navigate to <code>Microsoft Entra ID</code> > <code>Users</code> > <code>+ New user</code>. Enter the UPN as <code>az104-admin@yourdomain.onmicrosoft.com</code>. Fill in the Display Name and Job Title (e.g., "IT Manager"). Auto-generate the password and save it.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Create a Dynamic Group</h4>
+                        <p>Go to <code>Groups</code> > <code>+ New group</code>. Change Group type to Security. Change Membership type to <code>Dynamic User</code>. Click <code>Add dynamic query</code> and set the rule: <code>jobTitle -eq "IT Manager"</code>.</p>
+                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> Your newly created user will automatically appear in this group after a few minutes, demonstrating zero-touch administration.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Link to the sub-page -->
+            <a href="sub-pages/entra-id.html" class="deep-dive-btn">Deep Dive: Entra ID Module <i class="fa-solid fa-arrow-right"></i></a>
+
+        </section>
+
+        <!-- MODULE 2 -->
+        <section id="mod2" class="module-section">
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 2</div>
+                    <h1>Governance and Compliance</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod2">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>Governance ensures your cloud environment is secure and cost-effective. This module covers <strong>RBAC (Role-Based Access Control)</strong> to control <em>what</em> users can do, and <strong>Azure Policy</strong> to control <em>how</em> resources are deployed.</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Implement Azure Policy & RBAC</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Create a Management Group</h4>
+                        <p>Search for <code>Management groups</code>. Click <code>+ Create</code>. Name it <code>AZ104-Governance</code>. Move your current Subscription into this new Management Group. This allows you to apply policies to multiple subscriptions at once.</p>
+                    </div>
+                </div>
+            </div>
+            <a href="sub-pages/governance.html" class="deep-dive-btn">Deep Dive: Governance Module <i class="fa-solid fa-arrow-right"></i></a>
+        </section>
+
+        <!-- MODULE 3 -->
+        <section id="mod3" class="module-section">
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 3</div>
+                    <h1>Azure Administration</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod3">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>While the Azure Portal (GUI) is great for learning, real-world administration uses automation. This module introduces <strong>Azure PowerShell</strong>, <strong>Azure CLI</strong>, <strong>Azure Cloud Shell</strong>, and <strong>ARM Templates/Bicep</strong>.</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Deploy via Cloud Shell & ARM</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Launch Azure Cloud Shell</h4>
+                        <p>Click the <code>>_</code> icon at the top right of the Azure Portal. Select <strong>Bash</strong> (for Azure CLI) and create the required storage if prompted.</p>
+                    </div>
+                </div>
+            </div>
+            <a href="sub-pages/administration.html" class="deep-dive-btn">Deep Dive: Administration Module <i class="fa-solid fa-arrow-right"></i></a>
+        </section>
+
+        <!-- MODULE 4 -->
+        <section id="mod4" class="module-section">
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 4</div>
+                    <h1>Virtual Networking</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod4">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>Virtual Networks (VNets) are the core foundation of Azure IaaS. You will learn about IP Addressing (CIDR blocks), Subnets, and Network Security Groups (NSGs).</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Build a Secure VNet</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Create a VNet with Subnets</h4>
+                        <p>Search <code>Virtual networks</code> > <code>+ Create</code>. Name it <code>Core-VNet</code>. Under IP Addresses, set the IPv4 address space to <code>10.1.0.0/16</code>.</p>
+                    </div>
+                </div>
+            </div>
+            <a href="sub-pages/networking.html" class="deep-dive-btn">Deep Dive: Networking Module <i class="fa-solid fa-arrow-right"></i></a>
+        </section>
+
+        <!-- MODULE 5 -->
+        <section id="mod5" class="module-section">
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 5</div>
+                    <h1>Intersite Connectivity</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod5">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>By default, resources in different VNets cannot communicate. This module teaches <strong>VNet Peering</strong>, which routes traffic between VNets via Microsoft's private backbone.</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Global VNet Peering</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Establish the Peering</h4>
+                        <p>Go to your <code>Core-VNet</code>. Click <code>Peerings</code> > <code>+ Add</code>. Name it <code>Core-to-Spoke</code>.</p>
+                    </div>
+                </div>
+            </div>
+            <a href="sub-pages/intersite.html" class="deep-dive-btn">Deep Dive: Intersite Module <i class="fa-solid fa-arrow-right"></i></a>
+        </section>
+
+        <!-- MODULE 6 -->
+        <section id="mod6" class="module-section">
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 6</div>
+                    <h1>Traffic Management</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod6">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>This module focuses on routing and load balancing network traffic. You will learn about <strong>Azure Load Balancer</strong> (Layer 4), and <strong>Application Gateway</strong> (Layer 7 HTTP/HTTPS).</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Deploy a Public Load Balancer</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Create the Load Balancer</h4>
+                        <p>Search <code>Load balancers</code> > <code>+ Create</code>. Name it <code>az104-lb</code>. Set Type to <strong>Public</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <a href="sub-pages/traffic.html" class="deep-dive-btn">Deep Dive: Traffic Management Module <i class="fa-solid fa-arrow-right"></i></a>
+        </section>
+
+        <!-- MODULE 7 -->
+        <section id="mod7" class="module-section">
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 7</div>
+                    <h1>Azure Storage</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod7">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>Azure Storage is Microsoft's managed storage solution. This module dives into the Storage Account architecture, focusing heavily on <strong>Blobs</strong> and <strong>Azure Files</strong>.</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Manage Data & File Shares</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Deploy a Storage Account</h4>
+                        <p>Search <code>Storage accounts</code> > <code>+ Create</code>. Name it uniquely. Choose Standard performance and <code>Geo-redundant storage (GRS)</code>.</p>
+                    </div>
+                </div>
+            </div>
+            <a href="sub-pages/storage.html" class="deep-dive-btn">Deep Dive: Storage Module <i class="fa-solid fa-arrow-right"></i></a>
+        </section>
+
+        <!-- MODULE 8 -->
+        <section id="mod8" class="module-section">
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 8</div>
+                    <h1>Virtual Machines</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod8">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>VMs are the workhorse of the cloud. This module moves past simple VM creation and focuses on <strong>High Availability</strong> using Availability Zones and VM Scale Sets (VMSS).</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Deploy Scalable Compute</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Deploy a VM Scale Set</h4>
+                        <p>Search <code>Virtual machine scale sets</code> > <code>+ Create</code>. Name it <code>Web-VMSS</code>. Choose Windows Server.</p>
+                    </div>
+                </div>
+            </div>
+            <a href="sub-pages/compute.html" class="deep-dive-btn">Deep Dive: Compute Module <i class="fa-solid fa-arrow-right"></i></a>
+        </section>
+
+        <!-- MODULE 9 -->
+        <section id="mod9" class="module-section">
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 9</div>
+                    <h1>Serverless & Containers</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod9">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>Not every application requires a full Virtual Machine. This module explores Platform-as-a-Service (PaaS) offerings like <strong>Azure App Service</strong> and <strong>Azure Container Instances (ACI)</strong>.</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Deploy an Azure Container Instance</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Create the Container</h4>
+                        <p>Search <code>Container instances</code> > <code>+ Create</code>. Name the container <code>az104-aci</code>.</p>
+                    </div>
+                </div>
+            </div>
+            <a href="sub-pages/serverless.html" class="deep-dive-btn">Deep Dive: Serverless Module <i class="fa-solid fa-arrow-right"></i></a>
+        </section>
+
+        <!-- MODULE 10 -->
+        <section id="mod10" class="module-section">
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 10</div>
+                    <h1>Data Protection</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod10">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>Things will fail. Data will be accidentally deleted. This module covers business continuity using <strong>Azure Backup</strong> and <strong>Azure Site Recovery</strong>.</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Backup a Virtual Machine</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Configure the Backup Policy</h4>
+                        <p>Open your vault, go to <code>+ Backup</code> under Getting Started. Select "Azure" and "Virtual Machine".</p>
+                    </div>
+                </div>
+            </div>
+            <a href="sub-pages/data-protection.html" class="deep-dive-btn">Deep Dive: Data Protection Module <i class="fa-solid fa-arrow-right"></i></a>
+        </section>
+
+        <!-- MODULE 11 -->
+        <section id="mod11" class="module-section">
+            <div class="module-header flex-header">
+                <div>
+                    <div class="module-badge">Module 11</div>
+                    <h1>Monitoring</h1>
+                </div>
+                <label class="completion-toggle">
+                    <input type="checkbox" class="mark-complete-checkbox" data-module="mod11">
+                    <span class="toggle-text">Mark as Complete</span>
+                </label>
+            </div>
+            <div class="analysis-box">
+                <h3><i class="fa-solid fa-magnifying-glass"></i> Topic Analysis</h3>
+                <p>The final pillar of administration is maintaining health. <strong>Azure Monitor</strong> collects metrics and logs. <strong>Log Analytics Workspaces</strong> allow you to query those logs.</p>
+            </div>
+            <h2 class="lab-title"><i class="fa-solid fa-flask"></i> Guided Practical: Setup Azure Monitor Alerts</h2>
+            <div class="step-container">
+                <div class="lab-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Create an Alert Rule</h4>
+                        <p>Search <code>Monitor</code>. Go to <code>Alerts</code> > <code>+ Create Alert Rule</code>. Select a VM you created previously as the scope.</p>
+                    </div>
+                </div>
+            </div>
+            <a href="sub-pages/monitoring.html" class="deep-dive-btn">Deep Dive: Monitoring Module <i class="fa-solid fa-arrow-right"></i></a>
+        </section>
+
+        <!-- LEGAL FOOTER -->
+        <div class="disclaimer-footer">
+            <p><strong>Disclaimer:</strong> This website is an independent, unofficial study guide created for educational purposes. Microsoft, Azure, and AZ-104 are registered trademarks of Microsoft Corporation. This website and its content are not affiliated with, authorized by, endorsed by, or sponsored by Microsoft Corporation in any way.</p>
+        </div>
+
+    </main>
+
+    <!-- Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainContent = document.querySelector('.main-content');
+            const sections = document.querySelectorAll('.module-section');
+            const navLinks = document.querySelectorAll('.nav-links li a');
+            const checkboxes = document.querySelectorAll('.mark-complete-checkbox');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+
+            // --- SIDEBAR COLLAPSE FUNCTIONALITY ---
+            if (localStorage.getItem('az104_sidebar_collapsed') === 'true') {
+                sidebar.classList.add('collapsed');
+            }
+
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                localStorage.setItem('az104_sidebar_collapsed', sidebar.classList.contains('collapsed'));
+            });
+
+            // --- PROGRESS TRACKING ---
+            checkboxes.forEach(cb => {
+                const modId = cb.getAttribute('data-module');
+                const isCompleted = localStorage.getItem('az104_progress_' + modId) === 'true';
+                
+                if (isCompleted) {
+                    cb.checked = true;
+                    toggleCompletionUI(modId, true);
+                }
+
+                cb.addEventListener('change', (e) => {
+                    const checked = e.target.checked;
+                    localStorage.setItem('az104_progress_' + modId, checked);
+                    toggleCompletionUI(modId, checked);
+                });
+            });
+
+            function toggleCompletionUI(modId, isCompleted) {
+                const section = document.getElementById(modId);
+                const toggleLabel = section.querySelector('.completion-toggle');
+                const toggleText = section.querySelector('.toggle-text');
+                const navLink = document.querySelector(`.nav-links a[href="#${modId}"]`);
+                
+                if (isCompleted) {
+                    section.classList.add('is-completed');
+                    toggleLabel.classList.add('is-completed');
+                    toggleText.innerHTML = '<i class="fa-solid fa-check"></i> Completed';
+                    navLink.classList.add('is-completed');
+                } else {
+                    section.classList.remove('is-completed');
+                    toggleLabel.classList.remove('is-completed');
+                    toggleText.innerHTML = 'Mark as Complete';
+                    navLink.classList.remove('is-completed');
+                }
+            }
+
+            // --- SCROLL SPY ---
+            function updateActiveLink() {
+                let currentSectionId = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - mainContent.offsetTop;
+                    if (mainContent.scrollTop >= sectionTop - 150) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentSectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            mainContent.addEventListener('scroll', updateActiveLink);
+            updateActiveLink();
+        });
+    </script>
+</body>
+</html>

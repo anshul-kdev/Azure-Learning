@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create, Configure, and Manage Identities | AZ-104</title>
+    <title>Secure Resources with Azure RBAC | AZ-104</title>
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -328,7 +328,8 @@
         </div>
         
         <ul class="nav-links">
-            <li class="has-submenu expanded">
+            <!-- MODULE 1 -->
+            <li class="has-submenu">
                 <div class="nav-item-wrapper">
                     <a href="../index.html#mod1" title="1. Identity">
                         <i class="fa-solid fa-id-card"></i> 
@@ -337,19 +338,26 @@
                     <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
                 <ul class="submenu">
-                    <li><a href="entra-id.html" class="active">Entra ID Deep Dive</a></li>
-                    <li><a href="sspr.html">SSPR Setup</a></li>
+                    <li><a href="entra-id.html">Entra ID Deep Dive</a></li>
+                    <li><a href="sspr.html">SSPR (Soon)</a></li>
                 </ul>
             </li>
-            <li class="has-submenu">
+
+            <!-- MODULE 2: GOVERNANCE (Expanded since we are on this page) -->
+            <li class="has-submenu expanded">
                 <div class="nav-item-wrapper">
                     <a href="../index.html#mod2" title="2. Governance">
                         <i class="fa-solid fa-scale-balanced"></i> <span class="nav-text">2. Governance</span>
                     </a>
                     <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
-                <ul class="submenu"><li><a href="governance.html">RBAC & Policies</a></li></ul>
+                <ul class="submenu">
+                    <li><a href="governance.html" class="active">RBAC & Policies</a></li>
+                    <li><a href="azure-policy.html" class="active">Azure Policy</a></li>
+                </ul>
             </li>
+
+            <!-- MODULE 3 -->
             <li class="has-submenu">
                 <div class="nav-item-wrapper">
                     <a href="../index.html#mod3" title="3. Azure Administration">
@@ -359,6 +367,8 @@
                 </div>
                 <ul class="submenu"><li><a href="administration.html">CLI & PowerShell</a></li></ul>
             </li>
+            
+            <!-- MODULE 4 -->
             <li class="has-submenu">
                 <div class="nav-item-wrapper">
                     <a href="../index.html#mod4" title="4. Virtual Networking">
@@ -368,6 +378,8 @@
                 </div>
                 <ul class="submenu"><li><a href="networking.html">VNets & NSGs</a></li></ul>
             </li>
+            
+            <!-- MODULE 5 -->
             <li class="has-submenu">
                 <div class="nav-item-wrapper">
                     <a href="../index.html#mod5" title="5. Intersite Connectivity">
@@ -377,6 +389,8 @@
                 </div>
                 <ul class="submenu"><li><a href="intersite.html">VNet Peering</a></li></ul>
             </li>
+            
+            <!-- MODULE 6 -->
             <li class="has-submenu">
                 <div class="nav-item-wrapper">
                     <a href="../index.html#mod6" title="6. Traffic Management">
@@ -386,6 +400,8 @@
                 </div>
                 <ul class="submenu"><li><a href="traffic.html">Load Balancers</a></li></ul>
             </li>
+            
+            <!-- MODULE 7 -->
             <li class="has-submenu">
                 <div class="nav-item-wrapper">
                     <a href="../index.html#mod7" title="7. Azure Storage">
@@ -395,6 +411,8 @@
                 </div>
                 <ul class="submenu"><li><a href="storage.html">Storage Accounts</a></li></ul>
             </li>
+            
+            <!-- MODULE 8 -->
             <li class="has-submenu">
                 <div class="nav-item-wrapper">
                     <a href="../index.html#mod8" title="8. Virtual Machines">
@@ -404,6 +422,8 @@
                 </div>
                 <ul class="submenu"><li><a href="compute.html">VMs & Scale Sets</a></li></ul>
             </li>
+            
+            <!-- MODULE 9 -->
             <li class="has-submenu">
                 <div class="nav-item-wrapper">
                     <a href="../index.html#mod9" title="9. Serverless & Containers">
@@ -413,6 +433,8 @@
                 </div>
                 <ul class="submenu"><li><a href="serverless.html">App Services & ACI</a></li></ul>
             </li>
+            
+            <!-- MODULE 10 -->
             <li class="has-submenu">
                 <div class="nav-item-wrapper">
                     <a href="../index.html#mod10" title="10. Data Protection">
@@ -422,6 +444,8 @@
                 </div>
                 <ul class="submenu"><li><a href="data-protection.html">Backup & Recovery</a></li></ul>
             </li>
+            
+            <!-- MODULE 11 -->
             <li class="has-submenu">
                 <div class="nav-item-wrapper">
                     <a href="../index.html#mod11" title="11. Monitoring">
@@ -438,74 +462,66 @@
     <main class="main-content">
         <div class="container">
             
-            <a href="../index.html#mod1" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Main AZ-104 Hub</a>
+            <a href="../index.html#mod2" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Main AZ-104 Hub</a>
 
             <div class="header-section">
-                <span class="badge">MS Learn Module 2 Practical</span>
-                <h1>Create, Configure, and Manage Identities</h1>
-                <p class="lead">Hands-on exercises for managing users, groups, and licenses in Microsoft Entra ID.</p>
+                <span class="badge">MS Learn Module 5 Practical</span>
+                <h1>Secure Resources with Azure RBAC</h1>
+                <p class="lead">Learn how to manage access using Role-Based Access Control assignments, scopes, and auditing logs.</p>
             </div>
 
             <div class="notice-box">
                 <i class="fa-solid fa-circle-info" style="margin-right: 8px;"></i>
-                <strong>Note on Curriculum:</strong> MS Learn Module 1 ("Understand Microsoft Entra ID") focuses entirely on theoretical concepts (comparing AD DS, P1/P2 pricing). We have skipped directly to Module 2 to begin the practical, hands-on lab exercises.
+                <strong>Concept Refresher:</strong> A Role Assignment consists of three parts: a <strong>Security Principal</strong> (Who needs access?), a <strong>Role Definition</strong> (What can they do?), and a <strong>Scope</strong> (Where can they do it?).
             </div>
 
             <!-- LAB 1 -->
             <div class="lab-card">
-                <h2><i class="fa-solid fa-user-plus"></i> Exercise 1: Create Users and Assign Licenses</h2>
-                <p>Organizations need a definitive identity for each user to control access to cloud workloads. First, we will create a user and assign them a license to use Azure services.</p>
+                <h2><i class="fa-solid fa-eye"></i> Exercise 1: View Existing Access</h2>
+                <p>Before granting new permissions, an administrator must know how to audit existing permissions at a specific scope.</p>
                 
                 <ol class="step-list">
-                    <li>Sign in to the <a href="https://portal.azure.com" target="_blank" style="color: var(--primary-blue);">Azure portal</a> using your administrator account.</li>
-                    <li>In the global search bar, search for and select <code>Microsoft Entra ID</code>.</li>
-                    <li>In the left menu, under <strong>Manage</strong>, select <code>Users</code>, and then select <code>All users</code>.</li>
-                    <li>At the top of the page, select <code>+ New user</code> > <code>Create new user</code>.</li>
-                    <li>Under the <strong>Basics</strong> tab, enter a User principal name (e.g., <code>chris@yourtenant.onmicrosoft.com</code>) and Display name (e.g., <code>Chris Green</code>).</li>
-                    <li>Check the <code>Auto-generate password</code> box and copy the password to your clipboard. You will need this to test the login later.</li>
-                    <li>Click <code>Review + create</code>, and then <code>Create</code>.</li>
-                    <li><strong>Assigning the License:</strong> Go back to <code>All users</code>, click on <em>Chris Green</em>. On the left menu under Manage, click <code>Licenses</code>. Click <code>+ Assignments</code>, select an available license (like Microsoft Entra ID P2 or Microsoft 365), and click Save.</li>
+                    <li>Sign in to the <a href="https://portal.azure.com" target="_blank" style="color: var(--primary-blue);">Azure portal</a>.</li>
+                    <li>In the search bar, search for and select <code>Resource groups</code>.</li>
+                    <li>Select any existing resource group (or create a quick temporary one).</li>
+                    <li>In the left-hand navigation menu, click on <code>Access control (IAM)</code>. IAM stands for Identity and Access Management.</li>
+                    <li>Click on the <code>Check access</code> tab at the top.</li>
+                    <li>Search for your own user account name in the search bar and select it.</li>
+                    <li>Review your current assignments. You will likely see "Owner" or "Contributor" inherited from the Subscription scope.</li>
                 </ol>
-                <div class="success-verify">
-                    <i class="fa-solid fa-check-circle" style="margin-top: 3px;"></i>
-                    <div><strong>Verification:</strong> Open a private/incognito browser window. Go to portal.azure.com and log in with Chris's new UPN and auto-generated password. You will be prompted to change the password on the first login!</div>
-                </div>
             </div>
 
             <!-- LAB 2 -->
             <div class="lab-card">
-                <h2><i class="fa-solid fa-users"></i> Exercise 2: Add Groups and Group Licenses</h2>
-                <p>Assigning licenses to individual users is tedious. Best practice dictates that we assign licenses to a <em>Group</em>, and simply add users to that group.</p>
+                <h2><i class="fa-solid fa-key"></i> Exercise 2: Grant Access using RBAC</h2>
+                <p>In this exercise, we will follow the principle of least privilege. We will grant a user permission to manage Virtual Machines, but <em>only</em> within one specific Resource Group.</p>
                 
                 <ol class="step-list">
-                    <li>Return to the <code>Microsoft Entra ID</code> overview page.</li>
-                    <li>Under <strong>Manage</strong>, select <code>Groups</code>.</li>
-                    <li>Click <code>+ New group</code> at the top.</li>
-                    <li>Set the <strong>Group type</strong> to <code>Security</code>.</li>
-                    <li>Enter a Group name: <code>Cloud Administrators</code> and a description.</li>
-                    <li>Set <strong>Membership type</strong> to <code>Assigned</code>.</li>
-                    <li>Click the <code>No members selected</code> link. Search for <em>Chris Green</em>, click his name to add him to the "Selected" section, and click <code>Select</code>.</li>
-                    <li>Click <code>Create</code>.</li>
-                    <li><strong>Group Licensing:</strong> Open the newly created <em>Cloud Administrators</em> group. Click <code>Licenses</code> > <code>+ Assignments</code>, select a license, and save. Chris Green will now automatically inherit this license via group membership.</li>
+                    <li>Still inside your chosen Resource Group, navigate back to the <code>Access control (IAM)</code> page.</li>
+                    <li>At the top of the page, click the <code>+ Add</code> button, then select <code>Add role assignment</code>.</li>
+                    <li>On the <strong>Role</strong> tab, use the search bar to find <code>Virtual Machine Contributor</code>. Select it and click Next.</li>
+                    <li>On the <strong>Members</strong> tab, ensure "Assign access to" is set to <em>User, group, or service principal</em>.</li>
+                    <li>Click <code>+ Select members</code>. Search for the user we created in the previous module (e.g., "Chris Green") or any other user in your tenant. Select them.</li>
+                    <li>Click <code>Review + assign</code> at the bottom, and then click it again to finalize.</li>
                 </ol>
+                <div class="success-verify">
+                    <i class="fa-solid fa-check-circle" style="margin-top: 3px;"></i>
+                    <div><strong>Verification:</strong> Go to the <code>Role assignments</code> tab in IAM. You should now see "Chris Green" listed with the "Virtual Machine Contributor" role. Notice the Scope column says "This resource" (meaning the Resource Group level).</div>
+                </div>
             </div>
 
             <!-- LAB 3 -->
             <div class="lab-card">
-                <h2><i class="fa-solid fa-trash-can-arrow-up"></i> Exercise 3: Restore Deleted Users</h2>
-                <p>When a user is deleted in Entra ID, they are placed in a "Deleted users" container for 30 days. During this window, you can restore their account and all their access.</p>
+                <h2><i class="fa-solid fa-clock-rotate-left"></i> Exercise 3: View Activity Logs for RBAC Changes</h2>
+                <p>For security and compliance audits, Azure tracks exactly who granted access and when it happened.</p>
                 
                 <ol class="step-list">
-                    <li>Go to <code>Microsoft Entra ID</code> > <code>Users</code> > <code>All users</code>.</li>
-                    <li>Search for <em>Chris Green</em>. Check the box next to his name, click the <code>Delete</code> icon at the top menu, and confirm.</li>
-                    <li>On the left-hand menu, under Manage, click <code>Deleted users</code>.</li>
-                    <li>You will see Chris Green listed here. Check the box next to his name.</li>
-                    <li>At the top of the page, click <code>Restore user</code> and confirm.</li>
+                    <li>In the same Resource Group, scroll down the left-hand menu and click on <code>Activity log</code>.</li>
+                    <li>Change the Timespan filter to <strong>Last 6 hours</strong> if it isn't already.</li>
+                    <li>Look for an Operation Name called <code>Create role assignment</code>. It might take a minute or two to appear (click Refresh at the top if needed).</li>
+                    <li>Click on the event to view the summary.</li>
+                    <li>Click the <code>JSON</code> tab. This raw data contains the exact details of the API call, including the caller's IP address, the role ID, and the principal ID. This is the exact data that gets sent to security tools like Microsoft Sentinel!</li>
                 </ol>
-                <div class="success-verify">
-                    <i class="fa-solid fa-check-circle" style="margin-top: 3px;"></i>
-                    <div><strong>Verification:</strong> Go back to <code>All users</code>. Chris Green will reappear with all his previous group memberships and licenses fully intact.</div>
-                </div>
             </div>
 
         </div>

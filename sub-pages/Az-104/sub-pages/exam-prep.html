@@ -78,6 +78,8 @@
         .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
         .reset-btn:hover { background: rgba(239, 68, 68, 0.1); color: var(--error-red); border-color: var(--error-red); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .libutton { display: flex; flex-direction: column; justify-content: center; padding: 7px; text-align: center; outline: none; text-decoration: none !important; color: #ffffff !important; width: 200px; height: 32px; border-radius: 16px; background-color: #0A66C2; font-family: "SF Pro Text", Helvetica, sans-serif; margin: 40px auto 20px auto; transition: all 0.3s; }
+        .libutton:hover { filter: brightness(0.9); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(10, 102, 194, 0.3); }
     </style>
 </head>
 <body>
@@ -130,7 +132,7 @@
             </li>
             <li class="has-submenu expanded"><div class="nav-item-wrapper"><a href="#" style="border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 5px;"><i class="fa-solid fa-graduation-cap"></i> <span class="nav-text">Exam Prep</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
                 <ul class="submenu">
-                    <li><a href="quiz.html" class="active">50-Question Mock Exam</a></li>
+                    <li><a href="exam-prep.html" class="active">50-Question Mock Exam</a></li>
                 </ul>
             </li>
         </ul>
@@ -180,6 +182,9 @@
                 <div class="score-circle" id="final-score">0%</div>
                 <p id="summary-message" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 30px;"></p>
                 <button onclick="resetQuiz(true)" class="next-btn" style="display: inline-block;">Retake Exam <i class="fa-solid fa-rotate-right" style="margin-left: 5px;"></i></button>
+                
+                <!-- LINKEDIN FOLLOW BUTTON -->
+                <a class="libutton" href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=anshul2005" target="_blank">Follow on LinkedIn</a>
             </div>
         </div>
     </main>

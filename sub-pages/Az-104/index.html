@@ -1,4 +1,4 @@
-<!--AZ 104 Certifcation Home Page-->
+<!-- AZ 104 Certification Home Page -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&family=Consolas&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* LIGHT MODE VARIABLES (DEFAULT) */
         :root {
             --primary-blue: #0078d4;
             --dark-blue: #002050;
@@ -20,463 +21,132 @@
             --text-muted: #605e5c;
             --sidebar-bg: #f3f2f1;
             --sidebar-hover: #edebe9;
+            --bg-color: #faf9f8;
+            --card-bg: #ffffff;
             --code-bg: #f8f8f8;
             --accent-green: #107c10;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        /* DARK MODE VARIABLES */
+        body.dark-mode {
+            --primary-blue: #38bdf8;
+            --dark-blue: #0f172a;
+            --light-blue: #1e293b;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --sidebar-bg: #0f172a;
+            --sidebar-hover: #1e293b;
+            --bg-color: #020617;
+            --card-bg: #1e293b;
+            --code-bg: #0f172a;
+            --accent-green: #22c55e;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text-main);
-            background-color: #faf9f8;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; line-height: 1.6; transition: background-color 0.3s, color 0.3s; }
 
         /* SIDEBAR NAVIGATION */
-        .sidebar {
-            width: 320px;
-            background-color: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            overflow-x: hidden;
-            flex-shrink: 0;
-            transition: width 0.3s ease;
-        }
-
-        .sidebar.collapsed {
-            width: 72px;
-        }
-
-        .sidebar-header {
-            padding: 24px;
-            background-color: var(--dark-blue);
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            white-space: nowrap;
-        }
-
-        .header-text {
-            display: flex;
-            flex-direction: column;
-            transition: opacity 0.2s, width 0.2s;
-            overflow: hidden;
-        }
-
-        .sidebar.collapsed .header-text {
-            opacity: 0;
-            width: 0;
-            pointer-events: none;
-        }
-
-        .sidebar-header h2 {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .sidebar-header p {
-            font-size: 13px;
-            opacity: 0.8;
-            margin-top: 5px;
-            color: #b3d4fc;
-        }
-
-        .sidebar-toggle-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            transition: color 0.2s;
-        }
-
-        .sidebar-toggle-btn:hover {
-            color: #b3d4fc;
-        }
+        .sidebar { width: 320px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; flex-shrink: 0; transition: width 0.3s ease, background-color 0.3s; }
+        .sidebar.collapsed { width: 72px; }
+        
+        .sidebar-header { padding: 24px; background-color: var(--dark-blue); color: white; position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; white-space: nowrap; transition: background-color 0.3s; }
+        .header-text { display: flex; flex-direction: column; transition: opacity 0.2s, width 0.2s; overflow: hidden; }
+        .sidebar.collapsed .header-text { opacity: 0; width: 0; pointer-events: none; }
+        .sidebar-header h2 { font-size: 20px; font-weight: 600; }
+        .sidebar-header p { font-size: 13px; opacity: 0.8; margin-top: 5px; color: #b3d4fc; }
+        
+        .sidebar-toggle-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; width: 24px; transition: color 0.2s; }
+        .sidebar-toggle-btn:hover { color: #38bdf8; }
 
         /* NAV LINKS & EXPANDABLE MENU */
-        .nav-links {
-            list-style: none;
-            padding: 12px 0;
-            margin: 0;
-        }
+        .nav-links { list-style: none; padding: 12px 0; margin: 0; }
+        .nav-item-wrapper { display: flex; align-items: center; justify-content: space-between; transition: background-color 0.2s; }
+        .nav-item-wrapper:hover { background-color: var(--sidebar-hover); }
+        
+        .nav-links li a { display: flex; align-items: center; padding: 12px 16px 12px 24px; color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 600; flex-grow: 1; white-space: nowrap; transition: color 0.3s; }
+        .nav-links li a.active { background-color: var(--sidebar-hover); border-left: 4px solid var(--primary-blue); color: var(--primary-blue); }
+        .nav-links li a i:first-child { width: 24px; color: var(--primary-blue); margin-right: 12px; font-size: 16px; text-align: center; transition: margin 0.3s; }
+        
+        .sidebar.collapsed .nav-text { opacity: 0; width: 0; display: none; }
+        .sidebar.collapsed .nav-links li a i:first-child { margin-right: 0; font-size: 18px; }
 
-        .nav-item-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: background-color 0.2s;
-        }
+        /* CHECKMARKS */
+        .nav-links li a .check-icon { margin-left: auto; margin-right: 0; color: var(--accent-green); opacity: 0; transition: opacity 0.2s; font-size: 18px; overflow: hidden; }
+        .nav-links li a.is-completed .check-icon { opacity: 1; }
+        .sidebar.collapsed .nav-links li a .check-icon { opacity: 0 !important; width: 0; display: none; }
 
-        .nav-item-wrapper:hover {
-            background-color: var(--sidebar-hover);
-        }
-
-        .nav-links li a {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px 12px 24px;
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            flex-grow: 1;
-            white-space: nowrap;
-        }
-
-        .nav-links li a.active {
-            background-color: #edebe9;
-            border-left: 4px solid var(--primary-blue);
-            color: var(--primary-blue);
-        }
-
-        .nav-links li a i:first-child {
-            width: 24px;
-            color: var(--primary-blue);
-            margin-right: 12px;
-            font-size: 16px;
-            text-align: center;
-            transition: margin 0.3s;
-        }
-
-        .nav-text {
-            flex-grow: 1;
-            transition: opacity 0.2s, width 0.2s;
-            overflow: hidden;
-        }
-
-        .sidebar.collapsed .nav-text {
-            opacity: 0;
-            width: 0;
-            display: none;
-        }
-
-        .sidebar.collapsed .nav-links li a i:first-child {
-            margin-right: 0;
-            font-size: 18px;
-        }
-
-        /* Submenu Toggle Button */
-        .submenu-toggle {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 12px 24px 12px 12px;
-            font-size: 12px;
-            transition: color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .submenu-toggle i {
-            transition: transform 0.3s ease;
-        }
-
-        .has-submenu.expanded .submenu-toggle i {
-            transform: rotate(90deg);
-        }
-
-        .submenu-toggle:hover {
-            color: var(--primary-blue);
-        }
-
-        /* Submenu List */
-        .submenu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-in-out;
-            background-color: #e5e3e1; 
-        }
-
-        .has-submenu.expanded .submenu {
-            max-height: 300px;
-        }
-
-        .submenu li a {
-            padding: 10px 24px 10px 60px;
-            font-size: 13.5px;
-            font-weight: 400;
-            color: #4b5563;
-        }
-
-        .submenu li a:hover {
-            background-color: #dcdad8;
-            color: var(--primary-blue);
-        }
-
-        .sidebar.collapsed .submenu-toggle,
-        .sidebar.collapsed .submenu {
-            display: none !important;
-        }
-
-        /* Sidebar checkmark for completed modules */
-        .nav-links li a .check-icon {
-            margin-left: auto;
-            margin-right: 0;
-            color: var(--accent-green);
-            opacity: 0;
-            transition: opacity 0.2s, width 0.2s, margin 0.2s;
-            font-size: 18px;
-            overflow: hidden;
-        }
-
-        .nav-links li a.is-completed .check-icon {
-            opacity: 1;
-        }
-
-        .sidebar.collapsed .nav-links li a .check-icon {
-            opacity: 0 !important;
-            width: 0;
-            margin: 0;
-            display: none;
-        }
+        /* SUBMENU STYLES */
+        .submenu-toggle { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 12px 24px 12px 12px; font-size: 12px; transition: color 0.2s; display: flex; align-items: center; justify-content: center; }
+        .submenu-toggle i { transition: transform 0.3s ease; }
+        .has-submenu.expanded .submenu-toggle i { transform: rotate(90deg); }
+        .submenu-toggle:hover { color: var(--primary-blue); }
+        
+        .submenu { list-style: none; padding: 0; margin: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-in-out; background-color: rgba(0,0,0,0.03); }
+        body.dark-mode .submenu { background-color: rgba(255,255,255,0.02); }
+        .has-submenu.expanded .submenu { max-height: 300px; }
+        .submenu li a { padding: 10px 24px 10px 60px; font-size: 13.5px; font-weight: 400; color: var(--text-muted); border-left: 4px solid transparent; }
+        .submenu li a:hover { background-color: var(--sidebar-hover); color: var(--primary-blue); }
+        
+        .sidebar.collapsed .submenu-toggle, .sidebar.collapsed .submenu { display: none !important; }
 
         /* MAIN CONTENT AREA */
-        .main-content {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 40px 60px;
-            scroll-behavior: smooth;
-            position: relative;
-        }
-
-        .back-to-home {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--primary-blue);
-            text-decoration: none;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-        .back-to-home:hover {
-            text-decoration: underline;
-        }
-
-        .module-section {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 40px;
-            margin-bottom: 40px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            transition: border-color 0.3s;
-        }
+        .main-content { flex-grow: 1; overflow-y: auto; padding: 40px 60px; scroll-behavior: smooth; position: relative; }
         
-        .module-section.is-completed {
-            border: 2px solid var(--accent-green);
-        }
+        /* TOP BAR (Back link + Theme Toggle) */
+        .top-action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .back-to-home { display: inline-flex; align-items: center; gap: 8px; color: var(--primary-blue); text-decoration: none; font-weight: 600; }
+        .back-to-home:hover { text-decoration: underline; }
+        
+        .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 16px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .theme-toggle:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
 
-        .module-header {
-            border-bottom: 2px solid var(--light-blue);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
+        /* PROGRESS BAR */
+        .progress-section { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin-bottom: 40px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: all 0.3s; }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-weight: 600; color: var(--text-main); }
+        .progress-track { width: 100%; height: 10px; background-color: var(--border-color); border-radius: 5px; overflow: hidden; }
+        .progress-fill { height: 100%; background-color: var(--accent-green); width: 0%; transition: width 0.5s ease-out; }
 
-        .flex-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        /* MODULE BLOCKS */
+        .module-section { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 40px; margin-bottom: 40px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: all 0.3s; }
+        .module-section.is-completed { border: 2px solid var(--accent-green); }
+        .module-header { border-bottom: 2px solid var(--border-color); padding-bottom: 20px; margin-bottom: 30px; }
+        .flex-header { display: flex; justify-content: space-between; align-items: center; }
+        .module-badge { background-color: var(--light-blue); color: var(--primary-blue); padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; margin-bottom: 12px; transition: background-color 0.3s, color 0.3s; }
+        .module-header h1 { font-size: 32px; color: var(--text-main); transition: color 0.3s; }
 
-        .module-badge {
-            background-color: var(--light-blue);
-            color: var(--primary-blue);
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: inline-block;
-            margin-bottom: 12px;
-        }
+        .completion-toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; background: var(--bg-color); padding: 10px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; color: var(--text-muted); transition: all 0.2s; border: 1px solid var(--border-color); user-select: none; }
+        .completion-toggle:hover { background: var(--border-color); }
+        .completion-toggle.is-completed { background: rgba(34, 197, 94, 0.1); color: var(--accent-green); border-color: var(--accent-green); }
+        .completion-toggle input { display: none; }
 
-        .module-header h1 {
-            font-size: 32px;
-            color: var(--dark-blue);
-        }
+        .deep-dive-btn { display: inline-flex; align-items: center; gap: 8px; background-color: var(--primary-blue); color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 25px; transition: background-color 0.2s; border: none; }
+        .deep-dive-btn:hover { filter: brightness(0.9); }
 
-        /* COMPLETION TOGGLE CSS */
-        .completion-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            background: #f3f2f1;
-            padding: 10px 18px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
-            transition: all 0.2s;
-            border: 1px solid var(--border-color);
-            user-select: none;
-        }
+        .analysis-box { background-color: var(--light-blue); border-left: 4px solid var(--primary-blue); padding: 20px 25px; margin-bottom: 30px; transition: background-color 0.3s; }
+        .analysis-box h3 { color: var(--primary-blue); margin-bottom: 10px; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+        .analysis-box p { color: var(--text-main); font-size: 15px; margin-bottom: 10px; }
 
-        .completion-toggle:hover {
-            background: #edebe9;
-        }
+        .lab-title { font-size: 22px; color: var(--text-main); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .step-container { display: flex; flex-direction: column; gap: 20px; }
+        .lab-step { display: flex; gap: 20px; background: var(--bg-color); border: 1px solid var(--border-color); padding: 20px; border-radius: 6px; transition: background-color 0.3s, border-color 0.3s; }
+        .step-number { background-color: var(--primary-blue); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; font-size: 14px; }
+        .step-content h4 { font-size: 16px; margin-bottom: 8px; color: var(--text-main); }
+        .step-content p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 10px; }
 
-        .completion-toggle.is-completed {
-            background: #dff6dd;
-            color: var(--accent-green);
-            border-color: var(--accent-green);
-        }
+        /* CODE BLOCK & COPY BUTTON */
+        .code-container { position: relative; background-color: var(--code-bg); border: 1px solid var(--border-color); border-radius: 6px; margin-top: 10px; overflow: hidden; transition: all 0.3s; }
+        .code-container pre { padding: 15px; font-family: 'Consolas', monospace; font-size: 13px; color: var(--text-main); overflow-x: auto; margin: 0; }
+        code { background-color: var(--code-bg); padding: 2px 6px; border: 1px solid var(--border-color); border-radius: 4px; color: #d13438; font-size: 13px; }
+        body.dark-mode code { color: #f87171; }
+        
+        .copy-btn { position: absolute; top: 8px; right: 8px; background: var(--primary-blue); color: white; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 12px; font-weight: 600; opacity: 0; transition: opacity 0.2s, background-color 0.2s; display: flex; align-items: center; gap: 5px; }
+        .code-container:hover .copy-btn { opacity: 1; }
+        .copy-btn:hover { filter: brightness(0.9); }
 
-        .completion-toggle input {
-            display: none;
-        }
+        .success-check { margin-top: 10px; padding: 10px 15px; background-color: rgba(34, 197, 94, 0.1); border-left: 3px solid var(--accent-green); font-size: 13px; color: var(--text-main); border-radius: 0 4px 4px 0; }
 
-        /* DEEP DIVE BUTTON */
-        .deep-dive-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background-color: var(--primary-blue);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            margin-top: 25px;
-            transition: background-color 0.2s;
-            border: none;
-        }
-        .deep-dive-btn:hover {
-            background-color: var(--dark-blue);
-        }
-
-        .analysis-box {
-            background-color: #fff;
-            border-left: 4px solid var(--primary-blue);
-            padding: 20px 25px;
-            margin-bottom: 30px;
-            background-color: var(--light-blue);
-        }
-
-        .analysis-box h3 {
-            color: var(--primary-blue);
-            margin-bottom: 10px;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .analysis-box p {
-            line-height: 1.6;
-            color: var(--text-main);
-            font-size: 15px;
-            margin-bottom: 10px;
-        }
-
-        .lab-title {
-            font-size: 22px;
-            color: var(--text-main);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .step-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .lab-step {
-            display: flex;
-            gap: 20px;
-            background: white;
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            border-radius: 6px;
-        }
-
-        .step-number {
-            background-color: var(--dark-blue);
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            flex-shrink: 0;
-            font-size: 14px;
-        }
-
-        .step-content h4 {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: var(--text-main);
-        }
-
-        .step-content p {
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-
-        .step-content code {
-            font-family: 'Consolas', monospace;
-            background-color: var(--code-bg);
-            padding: 2px 6px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            color: #d13438;
-            font-size: 13px;
-        }
-
-        .success-check {
-            margin-top: 10px;
-            padding: 10px 15px;
-            background-color: #dff6dd;
-            border-left: 3px solid var(--accent-green);
-            font-size: 13px;
-            color: #0f5c0f;
-            border-radius: 0 4px 4px 0;
-        }
-
-        .disclaimer-footer {
-            background-color: #f3f2f1;
-            border-top: 1px solid var(--border-color);
-            padding: 30px;
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-muted);
-            line-height: 1.5;
-            margin-top: 20px;
-            border-radius: 8px;
-        }
-
+        .disclaimer-footer { background-color: var(--sidebar-bg); border-top: 1px solid var(--border-color); padding: 30px; text-align: center; font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-top: 20px; border-radius: 8px; transition: background-color 0.3s; }
     </style>
 </head>
 <body>
@@ -493,9 +163,7 @@
             </button>
         </div>
         
-        <!-- Navigation Links with Expandable Submenus -->
         <ul class="nav-links">
-            
             <!-- MODULE 1 -->
             <li class="has-submenu">
                 <div class="nav-item-wrapper">
@@ -663,14 +331,30 @@
                     <li><a href="sub-pages/monitoring.html">Azure Monitor Alerts</a></li>
                 </ul>
             </li>
-
         </ul>
     </nav>
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
         
-      
+        <!-- Top Action Bar (Back Link + Dark Mode Toggle) -->
+        <div class="top-action-bar">
+            <a href="../../index.html" class="back-to-home"><i class="fa-solid fa-arrow-left"></i> Back to Main Hub</a>
+            <button id="themeToggle" class="theme-toggle" title="Toggle Dark Mode">
+                <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
+            </button>
+        </div>
+
+        <!-- PROGRESS BAR SECTION -->
+        <div class="progress-section">
+            <div class="progress-header">
+                <span>Certification Readiness</span>
+                <span id="progressText">0/11 Modules Completed (0%)</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
 
         <!-- MODULE 1 -->
         <section id="mod1" class="module-section">
@@ -707,9 +391,7 @@
                     </div>
                 </div>
             </div>
-            
             <a href="sub-pages/entra-id.html" class="deep-dive-btn">Deep Dive: Entra ID Module <i class="fa-solid fa-arrow-right"></i></a>
-
         </section>
 
         <!-- MODULE 2 -->
@@ -735,6 +417,14 @@
                     <div class="step-content">
                         <h4>Create a Management Group</h4>
                         <p>Search for <code>Management groups</code>. Click <code>+ Create</code>. Name it <code>AZ104-Governance</code>. Move your current Subscription into this new Management Group. This allows you to apply policies to multiple subscriptions at once.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Apply an "Allowed Locations" Policy</h4>
+                        <p>Search for <code>Policy</code>. Go to <code>Assignments</code> > <code>Assign policy</code>. Set the Scope to your Subscription. Search for the built-in policy definition <code>Allowed locations</code>. In parameters, select only <code>East US</code>. Click Create.</p>
+                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> Try to create a Storage Account in "West Europe". The portal will block you with a "Policy Violation" error, proving your governance works.</div>
                     </div>
                 </div>
             </div>
@@ -763,7 +453,19 @@
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h4>Launch Azure Cloud Shell</h4>
-                        <p>Click the <code>>_</code> icon at the top right of the Azure Portal. Select <strong>Bash</strong> (for Azure CLI) and create the required storage if prompted.</p>
+                        <p>Click the <code>>_</code> icon at the top right of the Azure Portal. Select <strong>Bash</strong> (for Azure CLI) and create the required storage if prompted. You now have a terminal directly in your browser.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Deploy a Resource Group via CLI</h4>
+                        <p>In the terminal, type the following command to deploy a resource group. You can copy the code using the button below:</p>
+                        <div class="code-container">
+                            <button class="copy-btn" title="Copy to clipboard"><i class="fa-regular fa-copy"></i> Copy</button>
+                            <pre>az group create --name az104-rg3-cli --location eastus</pre>
+                        </div>
+                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> The terminal will return a JSON block indicating "ProvisioningState": "Succeeded". You just bypassed the GUI to create cloud infrastructure!</div>
                     </div>
                 </div>
             </div>
@@ -792,7 +494,14 @@
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h4>Create a VNet with Subnets</h4>
-                        <p>Search <code>Virtual networks</code> > <code>+ Create</code>. Name it <code>Core-VNet</code>. Under IP Addresses, set the IPv4 address space to <code>10.1.0.0/16</code>.</p>
+                        <p>Search <code>Virtual networks</code> > <code>+ Create</code>. Name it <code>Core-VNet</code>. Under IP Addresses, set the IPv4 address space to <code>10.1.0.0/16</code>. Add two subnets: <code>Frontend (10.1.0.0/24)</code> and <code>Backend (10.1.1.0/24)</code>.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Configure a Network Security Group (NSG)</h4>
+                        <p>Search <code>Network security groups</code> > <code>+ Create</code>. Name it <code>Frontend-NSG</code>. Open it, go to <code>Inbound security rules</code>. Add a rule: Source: Any, Destination Port: <code>80</code>, Protocol: TCP, Action: <code>Allow</code>. Associate this NSG with the <code>Frontend</code> subnet.</p>
                     </div>
                 </div>
             </div>
@@ -820,8 +529,16 @@
                 <div class="lab-step">
                     <div class="step-number">1</div>
                     <div class="step-content">
+                        <h4>Create a Second VNet</h4>
+                        <p>Create another Virtual Network named <code>Spoke-VNet</code> in a <strong>different region</strong> (e.g., West US). Give it a non-overlapping IP space: <code>10.2.0.0/16</code>.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
                         <h4>Establish the Peering</h4>
-                        <p>Go to your <code>Core-VNet</code>. Click <code>Peerings</code> > <code>+ Add</code>. Name it <code>Core-to-Spoke</code>.</p>
+                        <p>Go to your <code>Core-VNet</code>. Click <code>Peerings</code> > <code>+ Add</code>. Name it <code>Core-to-Spoke</code>. Under 'Remote virtual network', select your <code>Spoke-VNet</code>. Leave defaults to Allow traffic. Click Add.</p>
+                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> Azure sets up the routing automatically in both directions. VMs in Core can now ping VMs in Spoke using private IP addresses.</div>
                     </div>
                 </div>
             </div>
@@ -850,7 +567,14 @@
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h4>Create the Load Balancer</h4>
-                        <p>Search <code>Load balancers</code> > <code>+ Create</code>. Name it <code>az104-lb</code>. Set Type to <strong>Public</strong>.</p>
+                        <p>Search <code>Load balancers</code> > <code>+ Create</code>. Name it <code>az104-lb</code>. Set Type to <strong>Public</strong> and SKU to <strong>Standard</strong>. Under Frontend IP configuration, click "Add a frontend IP" and create a new Public IP address named <code>lb-pip</code>.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Configure Backend Pools and Rules</h4>
+                        <p>Once deployed, open the Load Balancer. Go to <code>Backend pools</code> > <code>+ Add</code>. Add the VNets/VMs you want to balance traffic to. Next, go to <code>Load balancing rules</code>, create a rule for Port 80 to route traffic from the Frontend IP to the Backend Pool.</p>
                     </div>
                 </div>
             </div>
@@ -879,7 +603,14 @@
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h4>Deploy a Storage Account</h4>
-                        <p>Search <code>Storage accounts</code> > <code>+ Create</code>. Name it uniquely. Choose Standard performance and <code>Geo-redundant storage (GRS)</code>.</p>
+                        <p>Search <code>Storage accounts</code> > <code>+ Create</code>. Name it uniquely. Choose Standard performance and <code>Geo-redundant storage (GRS)</code>. Create.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Map an Azure File Share</h4>
+                        <p>Open the Storage Account. Go to <code>File shares</code> > <code>+ File share</code>. Name it <code>corp-share</code>. Open the share, click <code>Connect</code> at the top. Select the 'Windows' tab and copy the provided PowerShell script. Run this script on your local Windows PC to mount the Azure cloud drive as your local Z: drive.</p>
                     </div>
                 </div>
             </div>
@@ -908,7 +639,15 @@
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h4>Deploy a VM Scale Set</h4>
-                        <p>Search <code>Virtual machine scale sets</code> > <code>+ Create</code>. Name it <code>Web-VMSS</code>. Choose Windows Server.</p>
+                        <p>Search <code>Virtual machine scale sets</code> > <code>+ Create</code>. Name it <code>Web-VMSS</code>. Choose Windows Server. In the <code>Scaling</code> tab, set the Initial instance count to <code>2</code>. Set the scaling policy to <code>Custom</code>.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Configure Auto-Scale Rules</h4>
+                        <p>In the scaling rules, set the minimum instances to 1, and maximum to 5. Set the rule to "Scale out (increase by 1)" when CPU > 75% for 10 minutes. Click Create.</p>
+                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> You now have a fleet of VMs that will automatically grow during peak traffic times and shrink overnight to save costs.</div>
                     </div>
                 </div>
             </div>
@@ -937,7 +676,15 @@
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h4>Create the Container</h4>
-                        <p>Search <code>Container instances</code> > <code>+ Create</code>. Name the container <code>az104-aci</code>.</p>
+                        <p>Search <code>Container instances</code> > <code>+ Create</code>. Name the container <code>az104-aci</code>. For the Image source, select <strong>Quickstart images</strong>, and choose the <code>mcr.microsoft.com/azuredocs/aci-helloworld</code> image.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Configure Networking</h4>
+                        <p>Under the Networking tab, ensure DNS name label is set to something unique (e.g., <code>az104-app-[yourname]</code>). Keep port 80 open. Click Review + Create.</p>
+                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> Once deployed, copy the FQDN (Fully Qualified Domain Name) from the overview page and paste it into your browser. You will see a live web app running entirely inside a container!</div>
                     </div>
                 </div>
             </div>
@@ -965,8 +712,15 @@
                 <div class="lab-step">
                     <div class="step-number">1</div>
                     <div class="step-content">
+                        <h4>Create a Recovery Services Vault</h4>
+                        <p>Search <code>Recovery Services vaults</code> > <code>+ Create</code>. Name it <code>AZ104-Vault</code> and place it in the same region as your existing Virtual Machines.</p>
+                    </div>
+                </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
                         <h4>Configure the Backup Policy</h4>
-                        <p>Open your vault, go to <code>+ Backup</code> under Getting Started. Select "Azure" and "Virtual Machine".</p>
+                        <p>Open your vault, go to <code>+ Backup</code> under Getting Started. Select "Azure" and "Virtual Machine". Choose the Default Backup Policy (Daily backups at night, retained for 30 days). Add your VM to the policy and enable backup.</p>
                     </div>
                 </div>
             </div>
@@ -998,6 +752,14 @@
                         <p>Search <code>Monitor</code>. Go to <code>Alerts</code> > <code>+ Create Alert Rule</code>. Select a VM you created previously as the scope.</p>
                     </div>
                 </div>
+                <div class="lab-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Configure Threshold and Actions</h4>
+                        <p>Choose the Signal <code>Percentage CPU</code>. Set the threshold logic to Greater Than 85%. In the Actions tab, create an Action Group to send an Email to your address. Click Review + Create.</p>
+                        <div class="success-check"><i class="fa-solid fa-check"></i> <strong>Result:</strong> If that VM's CPU spikes, Azure will automatically email you, allowing you to react before users experience downtime.</div>
+                    </div>
+                </div>
             </div>
             <a href="sub-pages/monitoring.html" class="deep-dive-btn">Deep Dive: Monitoring Module <i class="fa-solid fa-arrow-right"></i></a>
         </section>
@@ -1018,9 +780,33 @@
             const checkboxes = document.querySelectorAll('.mark-complete-checkbox');
             const sidebar = document.getElementById('sidebar');
             const sidebarToggle = document.getElementById('sidebarToggle');
+            const themeToggleBtn = document.getElementById('themeToggle');
+            const themeIcon = themeToggleBtn.querySelector('i');
+            const themeText = themeToggleBtn.querySelector('span');
             const submenuToggles = document.querySelectorAll('.submenu-toggle');
 
-            // --- SIDEBAR COLLAPSE FUNCTIONALITY ---
+            // --- 1. DARK MODE FUNCTIONALITY ---
+            if (localStorage.getItem('az104_theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                themeText.innerText = 'Light Mode';
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('az104_theme', isDark ? 'dark' : 'light');
+                
+                if (isDark) {
+                    themeIcon.classList.replace('fa-moon', 'fa-sun');
+                    themeText.innerText = 'Light Mode';
+                } else {
+                    themeIcon.classList.replace('fa-sun', 'fa-moon');
+                    themeText.innerText = 'Dark Mode';
+                }
+            });
+
+            // --- 2. SIDEBAR COLLAPSE FUNCTIONALITY ---
             if (localStorage.getItem('az104_sidebar_collapsed') === 'true') {
                 sidebar.classList.add('collapsed');
             }
@@ -1030,7 +816,7 @@
                 localStorage.setItem('az104_sidebar_collapsed', sidebar.classList.contains('collapsed'));
             });
 
-            // --- SUBMENU EXPAND/COLLAPSE FUNCTIONALITY ---
+            // --- 3. SUBMENU EXPAND/COLLAPSE FUNCTIONALITY ---
             submenuToggles.forEach(toggle => {
                 toggle.addEventListener('click', function(e) {
                     e.stopPropagation(); 
@@ -1039,7 +825,23 @@
                 });
             });
 
-            // --- PROGRESS TRACKING ---
+            // --- 4. OVERALL PROGRESS BAR FUNCTIONALITY ---
+            function updateOverallProgress() {
+                const totalModules = 11;
+                let completedModules = 0;
+                
+                for(let i = 1; i <= totalModules; i++) {
+                    if(localStorage.getItem('az104_progress_mod' + i) === 'true') {
+                        completedModules++;
+                    }
+                }
+                
+                const percentage = Math.round((completedModules / totalModules) * 100);
+                document.getElementById('progressFill').style.width = percentage + '%';
+                document.getElementById('progressText').innerText = `${completedModules}/${totalModules} Modules Completed (${percentage}%)`;
+            }
+
+            // --- 5. PROGRESS CHECKBOX TRACKING ---
             checkboxes.forEach(cb => {
                 const modId = cb.getAttribute('data-module');
                 const isCompleted = localStorage.getItem('az104_progress_' + modId) === 'true';
@@ -1053,6 +855,7 @@
                     const checked = e.target.checked;
                     localStorage.setItem('az104_progress_' + modId, checked);
                     toggleCompletionUI(modId, checked);
+                    updateOverallProgress(); // Update main progress bar on change
                 });
             });
 
@@ -1060,8 +863,6 @@
                 const section = document.getElementById(modId);
                 const toggleLabel = section.querySelector('.completion-toggle');
                 const toggleText = section.querySelector('.toggle-text');
-                
-                // Select the main link for the specific module inside the sidebar
                 const navLink = document.querySelector(`.nav-links > li > .nav-item-wrapper > a[href="#${modId}"]`);
                 
                 if (isCompleted) {
@@ -1077,7 +878,40 @@
                 }
             }
 
-            // --- SCROLL SPY ---
+            // Run progress bar calculation on initial page load
+            updateOverallProgress();
+
+            // --- 6. COPY TO CLIPBOARD FUNCTIONALITY ---
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            copyButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const codeElement = this.nextElementSibling; // the <pre> tag
+                    const codeText = codeElement.innerText;
+                    
+                    // Fallback clipboard method using execCommand for better iFrame/Browser compatibility
+                    const textArea = document.createElement("textarea");
+                    textArea.value = codeText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        // Visual feedback
+                        const originalHTML = this.innerHTML;
+                        this.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                        this.style.backgroundColor = 'var(--accent-green)';
+                        
+                        setTimeout(() => {
+                            this.innerHTML = originalHTML;
+                            this.style.backgroundColor = 'var(--primary-blue)';
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy text', err);
+                    }
+                    document.body.removeChild(textArea);
+                });
+            });
+
+            // --- 7. SCROLL SPY ---
             function updateActiveLink() {
                 let currentSectionId = '';
                 sections.forEach(section => {

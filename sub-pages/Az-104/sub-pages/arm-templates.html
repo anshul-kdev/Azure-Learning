@@ -25,7 +25,7 @@
         .nav-item-wrapper:hover { background-color: var(--sidebar-hover); }
         .nav-links li a { display: flex; align-items: center; padding: 12px 16px 12px 24px; color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 600; flex-grow: 1; white-space: nowrap; }
         .nav-links li a i:first-child { width: 24px; color: var(--primary-blue); margin-right: 12px; font-size: 16px; text-align: center; }
-        .submenu-toggle { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 12px 24px 12px 12px; font-size: 12px; transition: color 0.2s; display: flex; align-items: center; justify-content: center; }
+        .check-icon { opacity: 0; transition: opacity 0.2s; }.submenu-toggle { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 12px 24px 12px 12px; font-size: 12px; transition: color 0.2s; display: flex; align-items: center; justify-content: center; }
         .submenu-toggle i { transition: transform 0.3s ease; }
         .has-submenu.expanded .submenu-toggle i { transform: rotate(90deg); }
         .submenu-toggle:hover { color: var(--primary-blue); }
@@ -35,8 +35,7 @@
         .submenu li a:hover { background-color: #dcdad8; color: var(--primary-blue); }
         .submenu li a.active { color: var(--primary-blue); font-weight: 600; border-left: 4px solid var(--primary-blue); padding-left: 56px; background-color: #dcdad8; }
         .sidebar.collapsed .nav-text, .sidebar.collapsed .submenu-toggle, .sidebar.collapsed .submenu { display: none !important; }
-        .sidebar.collapsed .nav-links li a i:first-child { margin-right: 0; font-size: 18px; }
-        .main-content { flex-grow: 1; overflow-y: auto; padding: 40px 60px; scroll-behavior: smooth; }
+        .sidebar.collapsed .nav-links li a i:first-child { margin-right: 0; font-size: 18px; }.main-content { flex-grow: 1; overflow-y: auto; padding: 40px 60px; scroll-behavior: smooth; }
         .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--primary-blue); text-decoration: none; font-weight: 600; margin-bottom: 30px; }
         .back-link:hover { text-decoration: underline; }
         .container { max-width: 900px; margin: 0 auto; }
@@ -82,8 +81,7 @@
         body.dark-mode .nav-item-wrapper:hover { background-color: var(--sidebar-hover); }
         body.dark-mode .submenu li a { color: #cbd5e1; }
         body.dark-mode .submenu li a:hover, body.dark-mode .submenu li a.active { background-color: #111827; }
-        body.dark-mode .sidebar .nav-links li a i:first-child { color: #38bdf8; }
-        body.dark-mode .sidebar-toggle-btn { color: white; }
+        body.dark-mode .sidebar .nav-links li a i:first-child { color: #38bdf8; }body.dark-mode .sidebar-toggle-btn { color: white; }
         body.dark-mode .sidebar-toggle-btn:hover { color: #cbd5e1; }
     </style>
 
@@ -103,31 +101,189 @@
         </div>
         
         <ul class="nav-links">
-            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod1"><i class="fa-solid fa-id-card"></i><span class="nav-text">1. Identity</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div><ul class="submenu"><li><a href="entra-id.html">Entra ID Deep Dive</a></li><li><a href="sspr.html">SSPR Lab</a></li></ul></li>
-            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod2"><i class="fa-solid fa-scale-balanced"></i><span class="nav-text">2. Governance</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div><ul class="submenu"><li><a href="governance.html">RBAC Settings</a></li><li><a href="azure-policy.html">Azure Policy</a></li></ul></li>
-            
-            <!-- MODULE 3: AZURE ADMINISTRATION (Expanded) -->
-            <li class="has-submenu expanded">
+            <li class="has-submenu">
+                <div class="nav-item-wrapper">
+                    <a href="../index.html#mod1" title="1. Identity">
+                        <i class="fa-solid fa-id-card"></i> 
+                        <span class="nav-text">1. Identity</span>
+                        <i class="fa-solid fa-circle-check check-icon"></i>
+                    </a>
+                    <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <ul class="submenu">
+                    <li><a href="entra-id.html">Entra ID Deep Dive</a></li>
+                    <li><a href="sspr.html">SSPR Lab</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <div class="nav-item-wrapper">
+                    <a href="../index.html#mod2" title="2. Governance">
+                        <i class="fa-solid fa-scale-balanced"></i> 
+                        <span class="nav-text">2. Governance</span>
+                        <i class="fa-solid fa-circle-check check-icon"></i>
+                    </a>
+                    <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <ul class="submenu">
+                    <li><a href="governance.html">RBAC & Policies</a></li>
+                    <li><a href="azure-policy.html">Azure Policy</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
                 <div class="nav-item-wrapper">
                     <a href="../index.html#mod3" title="3. Azure Administration">
-                        <i class="fa-solid fa-terminal"></i> <span class="nav-text">3. Azure Administration</span>
+                        <i class="fa-solid fa-terminal"></i> 
+                        <span class="nav-text">3. Azure Administration</span>
+                        <i class="fa-solid fa-circle-check check-icon"></i>
                     </a>
                     <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
                 <ul class="submenu">
                     <li><a href="administration.html">CLI & PowerShell</a></li>
-                    <li><a href="arm-templates.html" class="active">ARM Templates</a></li>
+                    <li><a href="arm-templates.html">ARM Templates</a></li>
                 </ul>
             </li>
 
-            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod4"><i class="fa-solid fa-network-wired"></i><span class="nav-text">4. Virtual Networking</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div><ul class="submenu"><li><a href="networking.html">VNets, NSGs & DNS</a></li></ul></li>
-            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod5"><i class="fa-solid fa-route"></i><span class="nav-text">5. Intersite Connectivity</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div><ul class="submenu"><li><a href="intersite.html">VNet Peering</a></li></ul></li>
-            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod6"><i class="fa-solid fa-traffic-light"></i><span class="nav-text">6. Traffic Management</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div><ul class="submenu"><li><a href="traffic.html">Load Balancers</a></li></ul></li>
-            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod7"><i class="fa-solid fa-database"></i><span class="nav-text">7. Azure Storage</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div><ul class="submenu"><li><a href="storage.html">Storage Accounts</a></li></ul></li>
-            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod8"><i class="fa-solid fa-server"></i><span class="nav-text">8. Virtual Machines</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div><ul class="submenu"><li><a href="compute.html">VMs & Scale Sets</a></li></ul></li>
-            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod9"><i class="fa-solid fa-cubes"></i><span class="nav-text">9. Serverless & Containers</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div><ul class="submenu"><li><a href="serverless.html">App Services & ACI</a></li></ul></li>
-            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod10"><i class="fa-solid fa-shield-halved"></i><span class="nav-text">10. Data Protection</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div><ul class="submenu"><li><a href="data-protection.html">Backup & Recovery</a></li></ul></li>
-            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod11"><i class="fa-solid fa-chart-line"></i><span class="nav-text">11. Monitoring</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div><ul class="submenu"><li><a href="monitoring.html">Azure Monitor Alerts</a></li></ul></li>
+            <li class="has-submenu">
+                <div class="nav-item-wrapper">
+                    <a href="../index.html#mod4" title="4. Virtual Networking">
+                        <i class="fa-solid fa-network-wired"></i> 
+                        <span class="nav-text">4. Virtual Networking</span>
+                        <i class="fa-solid fa-circle-check check-icon"></i>
+                    </a>
+                    <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <ul class="submenu">
+                    <li><a href="networking.html">VNets, NSGs & DNS</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <div class="nav-item-wrapper">
+                    <a href="../index.html#mod5" title="5. Intersite Connectivity">
+                        <i class="fa-solid fa-route"></i> 
+                        <span class="nav-text">5. Intersite Connectivity</span>
+                        <i class="fa-solid fa-circle-check check-icon"></i>
+                    </a>
+                    <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <ul class="submenu">
+                    <li><a href="intersite.html">VNet Peering</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <div class="nav-item-wrapper">
+                    <a href="../index.html#mod6" title="6. Traffic Management">
+                        <i class="fa-solid fa-traffic-light"></i> 
+                        <span class="nav-text">6. Traffic Management</span>
+                        <i class="fa-solid fa-circle-check check-icon"></i>
+                    </a>
+                    <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <ul class="submenu">
+                    <li><a href="traffic.html">Load Balancers</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <div class="nav-item-wrapper">
+                    <a href="../index.html#mod7" title="7. Azure Storage">
+                        <i class="fa-solid fa-database"></i> 
+                        <span class="nav-text">7. Azure Storage</span>
+                        <i class="fa-solid fa-circle-check check-icon"></i>
+                    </a>
+                    <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <ul class="submenu">
+                    <li><a href="storage.html">Storage Accounts</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <div class="nav-item-wrapper">
+                    <a href="../index.html#mod8" title="8. Virtual Machines">
+                        <i class="fa-solid fa-server"></i> 
+                        <span class="nav-text">8. Virtual Machines</span>
+                        <i class="fa-solid fa-circle-check check-icon"></i>
+                    </a>
+                    <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <ul class="submenu">
+                    <li><a href="compute.html">VMs & Scale Sets</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <div class="nav-item-wrapper">
+                    <a href="../index.html#mod9" title="9. Serverless & Containers">
+                        <i class="fa-solid fa-cubes"></i> 
+                        <span class="nav-text">9. Serverless & Containers</span>
+                        <i class="fa-solid fa-circle-check check-icon"></i>
+                    </a>
+                    <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <ul class="submenu">
+                    <li><a href="serverless.html">App Services & ACI</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <div class="nav-item-wrapper">
+                    <a href="../index.html#mod10" title="10. Data Protection">
+                        <i class="fa-solid fa-shield-halved"></i> 
+                        <span class="nav-text">10. Data Protection</span>
+                        <i class="fa-solid fa-circle-check check-icon"></i>
+                    </a>
+                    <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <ul class="submenu">
+                    <li><a href="data-protection.html">Backup & Recovery</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <div class="nav-item-wrapper">
+                    <a href="../index.html#mod11" title="11. Monitoring">
+                        <i class="fa-solid fa-chart-line"></i> 
+                        <span class="nav-text">11. Monitoring</span>
+                        <i class="fa-solid fa-circle-check check-icon"></i>
+                    </a>
+                    <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <ul class="submenu">
+                    <li><a href="monitoring.html">Azure Monitor Alerts</a></li>
+                </ul>
+            </li>
+
+            <!-- CAPSTONE PROJECTS SECTION -->
+            <li class="has-submenu">
+                <div class="nav-item-wrapper">
+                    <a href="#" style="border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 5px;">
+                        <i class="fa-solid fa-briefcase"></i> <span class="nav-text">Capstone Projects</span>
+                    </a>
+                    <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <ul class="submenu">
+                    <li><a href="project-1.html">Proj 1: 3-Tier Web App</a></li>
+                    <li><a href="project-2.html">Proj 2: Hub & Spoke</a></li>
+                    <li><a href="project-3.html">Proj 3: Data Archive</a></li>
+                </ul>
+            </li>
+            <!-- EXAM PREP SECTION -->
+            <li class="has-submenu">
+                <div class="nav-item-wrapper">
+                    <a href="#" style="border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 5px;">
+                        <i class="fa-solid fa-graduation-cap"></i> <span class="nav-text">Exam Prep</span>
+                    </a>
+                    <button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <ul class="submenu">
+                    <li><a href="exam-prep.html">50-Question Mock Exam</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 

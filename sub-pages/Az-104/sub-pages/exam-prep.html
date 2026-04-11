@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AZ-104 Practice Exam (50 Questions) | AZ-104</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Chosen Palette: Azure Administrator Standard (Blue, Slate, White/Dark Slate, Green/Red for Quiz) -->
+    <!-- Application Structure Plan: The application uses a dynamic Single Page Application (SPA) quiz engine layout. Instead of overwhelming the user with a 50-question static scrolling list, it presents one question at a time with instant feedback. The left sidebar provides standard navigation, while the main content area houses the interactive exam engine. The engine includes a progress bar, score tracker, interactive option buttons, and a dynamic explanation block that appears post-answer. This structure maximizes focus, provides immediate reinforcement learning, and simulates a real exam environment. -->
+    <!-- Visualization & Content Choices: Goal: Assess Knowledge & Teach -> Viz/Presentation Method: Interactive Quiz Engine with Dynamic DOM updates -> Interaction: Clickable option buttons that trigger state changes (correct/incorrect styling) and reveal explanatory text -> Justification: Active recall (quizzing) is proven to be more effective for retention than passive reading. Instant feedback corrects misconceptions immediately. -> Library/Method: Vanilla JS for state management and DOM manipulation, Tailwind CSS for reactive styling (NO SVG/Mermaid). -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        :root { --primary-blue: #0078d4; --dark-blue: #002050; --light-blue: #eff6fc; --border-color: #edebe9; --text-main: #323130; --text-muted: #6b7280; --sidebar-bg: #f3f2f1; --sidebar-hover: #edebe9; --bg-color: #faf9f8; --card-bg: #ffffff; --code-bg: #f8f8f8; --accent-green: #107c10; --error-red: #d13438; }
+        body.dark-mode { --primary-blue: #38bdf8; --dark-blue: #0f172a; --light-blue: #1e293b; --border-color: #334155; --text-main: #f8fafc; --text-muted: #94a3b8; --sidebar-bg: #0f172a; --sidebar-hover: #1e293b; --bg-color: #020617; --card-bg: #1e293b; --code-bg: #0f172a; --accent-green: #22c55e; --error-red: #ef4444; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; line-height: 1.6; transition: background-color 0.3s, color 0.3s; }
+        .sidebar { width: 320px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; flex-shrink: 0; transition: width 0.3s ease, background-color 0.3s; }
+        .sidebar.collapsed { width: 72px; }
+        .sidebar-header { padding: 24px; background-color: var(--dark-blue); color: white; position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; white-space: nowrap; transition: background-color 0.3s; }
+        .header-text { display: flex; flex-direction: column; transition: opacity 0.2s, width 0.2s; overflow: hidden; }
+        .sidebar.collapsed .header-text { opacity: 0; width: 0; pointer-events: none; }
+        .sidebar-header h2 { font-size: 20px; font-weight: 600; }
+        .sidebar-header p { font-size: 13px; opacity: 0.8; margin-top: 5px; color: #b3d4fc; }
+        .sidebar-toggle-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; width: 24px; transition: color 0.2s; }
+        .sidebar-toggle-btn:hover { color: #38bdf8; }
+        .nav-links { list-style: none; padding: 12px 0; margin: 0; }
+        .nav-item-wrapper { display: flex; align-items: center; justify-content: space-between; transition: background-color 0.2s; }
+        .nav-item-wrapper:hover { background-color: var(--sidebar-hover); }
+        .nav-links li a { display: flex; align-items: center; padding: 12px 16px 12px 24px; color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 600; flex-grow: 1; white-space: nowrap; transition: color 0.3s; }
+        .nav-links li a i:first-child { width: 24px; color: var(--primary-blue); margin-right: 12px; font-size: 16px; text-align: center; }
+        .submenu-toggle { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 12px 24px 12px 12px; font-size: 12px; transition: color 0.2s; display: flex; align-items: center; justify-content: center; }
+        .submenu-toggle i { transition: transform 0.3s ease; }
+        .has-submenu.expanded .submenu-toggle i { transform: rotate(90deg); }
+        .submenu-toggle:hover { color: var(--primary-blue); }
+        .submenu { list-style: none; padding: 0; margin: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-in-out; background-color: rgba(0,0,0,0.03); }
+        body.dark-mode .submenu { background-color: rgba(255,255,255,0.02); }
+        .has-submenu.expanded .submenu { max-height: 300px; }
+        .submenu li a { padding: 10px 24px 10px 60px; font-size: 13.5px; font-weight: 400; color: var(--text-muted); border-left: 4px solid transparent; }
+        .submenu li a:hover { background-color: var(--sidebar-hover); color: var(--primary-blue); }
+        .submenu li a.active { color: var(--primary-blue); font-weight: 600; border-left: 4px solid var(--primary-blue); padding-left: 56px; background-color: var(--sidebar-hover); }
+        .sidebar.collapsed .nav-text, .sidebar.collapsed .submenu-toggle, .sidebar.collapsed .submenu { display: none !important; }
+        .sidebar.collapsed .nav-links li a i:first-child { margin-right: 0; font-size: 18px; }
+        .main-content { flex-grow: 1; overflow-y: auto; padding: 40px 60px; scroll-behavior: smooth; display: flex; flex-direction: column; }
+        .top-action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--primary-blue); text-decoration: none; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; }
+        .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 16px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .theme-toggle:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+        .container { max-width: 900px; margin: 0 auto; width: 100%; flex-grow: 1; display: flex; flex-direction: column; }
+        .badge { background-color: var(--light-blue); color: var(--primary-blue); padding: 4px 12px; border-radius: 4px; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; margin-bottom: 1rem; transition: background-color 0.3s, color 0.3s; }
+        h1 { font-size: 2.5rem; color: var(--text-main); margin: 0 0 1rem 0; transition: color 0.3s; }
+        .quiz-container { background-color: var(--card-bg); border: 1px solid var(--border-color); border-top: 4px solid var(--primary-blue); border-radius: 8px; padding: 2.5rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: all 0.3s; flex-grow: 1; display: flex; flex-direction: column; }
+        .quiz-progress-bar { width: 100%; height: 8px; background-color: var(--border-color); border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
+        .quiz-progress-fill { height: 100%; background-color: var(--primary-blue); width: 0%; transition: width 0.3s ease; }
+        .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: 600; color: var(--text-muted); }
+        .question-text { font-size: 1.25rem; font-weight: 600; color: var(--text-main); margin-bottom: 25px; line-height: 1.5; }
+        .options-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+        .option-btn { background-color: var(--bg-color); border: 2px solid var(--border-color); color: var(--text-main); padding: 15px 20px; border-radius: 8px; text-align: left; font-size: 1rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 15px; }
+        .option-btn:hover:not(:disabled) { border-color: var(--primary-blue); background-color: var(--light-blue); }
+        .option-letter { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 4px; background-color: var(--border-color); font-weight: bold; font-size: 14px; flex-shrink: 0; }
+        .option-btn.correct { border-color: var(--accent-green); background-color: rgba(34, 197, 94, 0.1); }
+        .option-btn.correct .option-letter { background-color: var(--accent-green); color: white; }
+        .option-btn.incorrect { border-color: var(--error-red); background-color: rgba(239, 68, 68, 0.1); }
+        .option-btn.incorrect .option-letter { background-color: var(--error-red); color: white; }
+        .option-btn:disabled { cursor: default; }
+        .explanation-box { display: none; background-color: var(--light-blue); border-left: 4px solid var(--primary-blue); padding: 1.5rem; border-radius: 0 8px 8px 0; margin-bottom: 25px; animation: fadeIn 0.3s ease; }
+        .explanation-box.correct-bg { background-color: rgba(34, 197, 94, 0.1); border-left-color: var(--accent-green); }
+        .explanation-box.incorrect-bg { background-color: rgba(239, 68, 68, 0.1); border-left-color: var(--error-red); }
+        .explanation-title { font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .explanation-text { color: var(--text-main); font-size: 0.95rem; line-height: 1.6; }
+        .next-btn { background-color: var(--primary-blue); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: filter 0.2s; align-self: flex-end; display: none; }
+        .next-btn:hover { filter: brightness(0.9); }
+        .summary-container { text-align: center; padding: 40px 20px; display: none; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; border: 8px solid var(--primary-blue); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: var(--primary-blue); margin: 0 auto 20px auto; }
+        .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+        .reset-btn:hover { background: rgba(239, 68, 68, 0.1); color: var(--error-red); border-color: var(--error-red); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="header-text"><h2>AZ-104 Study Guide</h2><p>Based on the Official Syllabus</p></div>
+            <button id="sidebarToggle" class="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <ul class="nav-links">
+            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod1"><i class="fa-solid fa-id-card"></i> <span class="nav-text">1. Identity</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu"><li><a href="entra-id.html">Entra ID Deep Dive</a></li><li><a href="sspr.html">SSPR Lab</a></li></ul>
+            </li>
+            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod2"><i class="fa-solid fa-scale-balanced"></i> <span class="nav-text">2. Governance</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu"><li><a href="governance.html">RBAC Settings</a></li><li><a href="azure-policy.html">Azure Policy</a></li></ul>
+            </li>
+            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod3"><i class="fa-solid fa-terminal"></i> <span class="nav-text">3. Azure Administration</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu"><li><a href="administration.html">CLI & PowerShell</a></li><li><a href="arm-templates.html">ARM Templates</a></li></ul>
+            </li>
+            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod4"><i class="fa-solid fa-network-wired"></i> <span class="nav-text">4. Virtual Networking</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu"><li><a href="networking.html">VNets, NSGs & DNS</a></li></ul>
+            </li>
+            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod5"><i class="fa-solid fa-route"></i> <span class="nav-text">5. Intersite Connectivity</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu"><li><a href="intersite.html">VNet Peering</a></li></ul>
+            </li>
+            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod6"><i class="fa-solid fa-traffic-light"></i> <span class="nav-text">6. Traffic Management</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu"><li><a href="traffic.html">Load Balancers</a></li></ul>
+            </li>
+            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod7"><i class="fa-solid fa-database"></i> <span class="nav-text">7. Azure Storage</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu"><li><a href="storage.html">Storage Accounts</a></li></ul>
+            </li>
+            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod8"><i class="fa-solid fa-server"></i> <span class="nav-text">8. Virtual Machines</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu"><li><a href="compute.html">VMs & Scale Sets</a></li></ul>
+            </li>
+            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod9"><i class="fa-solid fa-cubes"></i> <span class="nav-text">9. Serverless & Containers</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu"><li><a href="serverless.html">App Services & ACI</a></li></ul>
+            </li>
+            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod10"><i class="fa-solid fa-shield-halved"></i> <span class="nav-text">10. Data Protection</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu"><li><a href="data-protection.html">Backup & Recovery</a></li></ul>
+            </li>
+            <li class="has-submenu"><div class="nav-item-wrapper"><a href="../index.html#mod11"><i class="fa-solid fa-chart-line"></i> <span class="nav-text">11. Monitoring</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu"><li><a href="monitoring.html">Azure Monitor Alerts</a></li></ul>
+            </li>
+            <li class="has-submenu"><div class="nav-item-wrapper"><a href="#" style="border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 5px;"><i class="fa-solid fa-briefcase"></i> <span class="nav-text">Capstone Projects</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu">
+                    <li><a href="project-1.html">Proj 1: 3-Tier Web App</a></li>
+                    <li><a href="project-2.html">Proj 2: Hub & Spoke</a></li>
+                    <li><a href="project-3.html">Proj 3: Data Archive</a></li>
+                </ul>
+            </li>
+            <li class="has-submenu expanded"><div class="nav-item-wrapper"><a href="#" style="border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 5px;"><i class="fa-solid fa-graduation-cap"></i> <span class="nav-text">Exam Prep</span></a><button class="submenu-toggle"><i class="fa-solid fa-chevron-right"></i></button></div>
+                <ul class="submenu">
+                    <li><a href="quiz.html" class="active">50-Question Mock Exam</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="top-action-bar">
+                <a href="../index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Main AZ-104 Hub</a>
+                <button id="themeToggle" class="theme-toggle" title="Toggle Dark Mode">
+                    <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
+                </button>
+            </div>
+
+            <div id="intro-screen">
+                <span class="badge" style="background-color: var(--primary-blue); color: white;">Final Assessment</span>
+                <h1>AZ-104 Master Simulator</h1>
+                <p class="lead" style="margin-bottom: 2rem;">Test your readiness with 50 high-yield practice questions covering all exam domains. Immediate feedback and detailed explanations are provided to reinforce your learning.</p>
+                <button onclick="startQuiz()" class="next-btn" style="display: inline-block; padding: 15px 30px; font-size: 1.1rem;">Start Practice Exam <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
+            </div>
+
+            <div class="quiz-container" id="quiz-engine" style="display: none;">
+                <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="progress-fill"></div></div>
+                <div class="quiz-header">
+                    <span id="question-tracker">Question 1 of 50</span>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <span id="score-tracker">Score: 0</span>
+                        <button onclick="resetQuiz()" class="reset-btn" title="Reset Exam Progress"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
+                    </div>
+                </div>
+                
+                <div class="question-text" id="question-text">Loading question...</div>
+                
+                <div class="options-grid" id="options-grid"></div>
+                
+                <div class="explanation-box" id="explanation-box">
+                    <div class="explanation-title" id="explanation-title"></div>
+                    <div class="explanation-text" id="explanation-text"></div>
+                </div>
+                
+                <button class="next-btn" id="next-btn" onclick="handleNext()">Next Question <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></button>
+            </div>
+
+            <div class="quiz-container summary-container" id="summary-screen">
+                <h2>Exam Completed!</h2>
+                <p style="margin-bottom: 30px; color: var(--text-muted);">Here is how you performed on the AZ-104 simulator:</p>
+                <div class="score-circle" id="final-score">0%</div>
+                <p id="summary-message" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 30px;"></p>
+                <button onclick="resetQuiz(true)" class="next-btn" style="display: inline-block;">Retake Exam <i class="fa-solid fa-rotate-right" style="margin-left: 5px;"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const questions = [
+            { q: "You need to ensure that multiple users can manage virtual machines in a specific resource group. What is the principle of least privilege method to do this?", opts: ["Assign the Owner role at the subscription level.", "Assign the Virtual Machine Contributor role at the resource group level.", "Assign the Contributor role at the subscription level.", "Create a custom policy and assign it to the resource group."], a: 1, exp: "Virtual Machine Contributor allows managing VMs. Assigning it at the Resource Group level adheres to the principle of least privilege, preventing access to other resource groups." },
+            { q: "You plan to implement Self-Service Password Reset (SSPR). Which Azure AD pricing tier is the minimum required to allow users to reset their passwords and write the changes back to an on-premises Active Directory?", opts: ["Azure AD Free", "Azure AD Basic", "Azure AD Premium P1", "Microsoft 365 Apps"], a: 2, exp: "Password writeback to on-premises AD requires at least an Azure AD Premium P1 license." },
+            { q: "You have an Azure web app. You need to ensure that the web app is automatically scaled based on CPU utilization. Which feature should you use?", opts: ["Autoscale in Azure Monitor", "Availability Sets", "Application Gateway", "Azure Traffic Manager"], a: 0, exp: "Autoscale in Azure Monitor allows you to automatically increase or decrease the instance count of an App Service based on metrics like CPU utilization." },
+            { q: "Which Azure resource provides a centralized location to manage, track, and audit data backups?", opts: ["Azure Monitor", "Storage Account", "Recovery Services vault", "Azure Key Vault"], a: 2, exp: "A Recovery Services vault is an entity that stores the backups and recovery points created over time and contains the backup policies applied to protected resources." },
+            { q: "You have an Azure subscription. You need to deploy a custom JSON template to guarantee that resources are deployed identically every time. What is this concept known as?", opts: ["High Availability", "Idempotency", "Elasticity", "Fault Tolerance"], a: 1, exp: "Idempotency in ARM templates means you can deploy the same template many times and get the same resource state without causing duplication errors." },
+            { q: "You have a VNet with an address space of 10.0.0.0/16. You create a subnet with 10.0.0.0/24. How many usable IP addresses are available for virtual machines in this subnet?", opts: ["256", "255", "251", "254"], a: 2, exp: "A /24 subnet contains 256 IP addresses. Azure reserves 5 IP addresses per subnet (the first four and the last one), leaving 251 usable addresses." },
+            { q: "Which tool allows you to securely map an Azure File share to a local Windows 10 machine over the internet?", opts: ["Azure File Sync", "SMB 3.0 over Port 445", "Azure Data Box", "NFS 4.1"], a: 1, exp: "Azure Files supports standard SMB 3.0. As long as your ISP does not block Port 445, you can map the drive directly to Windows over the internet." },
+            { q: "You need to limit the geographical regions where administrators can create resources in your subscription. What should you use?", opts: ["Azure Policy", "Role-Based Access Control (RBAC)", "Network Security Group (NSG)", "Resource Locks"], a: 0, exp: "Azure Policy allows you to enforce rules on your resources, such as restricting deployment to specific 'Allowed Locations'." },
+            { q: "Which routing device is required to establish VNet Peering between two virtual networks in different Azure regions?", opts: ["Azure Firewall", "Virtual Network Gateway", "No routing device is required", "Azure ExpressRoute"], a: 2, exp: "Global VNet Peering connects VNets across regions directly through the Microsoft backbone infrastructure. No VPN gateway or firewall is required to establish the link." },
+            { q: "You need to assign a user the ability to reset passwords for non-administrators, but they should not be able to manage user licenses. Which role should you assign?", opts: ["Global Administrator", "User Administrator", "Helpdesk Administrator", "Security Administrator"], a: 2, exp: "The Helpdesk Administrator role can change passwords, invalidate refresh tokens, and monitor service health for non-admins, but cannot manage billing or licenses." },
+            { q: "Which parameter in an ARM template allows you to securely pass a password during deployment without it being visible in the deployment logs?", opts: ["securestring", "hiddenstring", "password", "encrypted"], a: 0, exp: "The 'securestring' and 'secureobject' parameter types ensure that the value passed is not saved to the deployment history or logged." },
+            { q: "You want to migrate an on-premises VMware virtual machine to Azure. Which service orchestrates the replication and failover?", opts: ["Azure Migrate", "Azure Backup", "Azure Site Recovery", "Azure Data Box"], a: 2, exp: "Azure Site Recovery (often integrated within Azure Migrate) handles the continuous replication and orchestration of failover for disaster recovery and migration." },
+            { q: "You have an Azure Storage account configured with Locally Redundant Storage (LRS). How many synchronous copies of your data are maintained?", opts: ["1", "3", "6", "0"], a: 1, exp: "LRS replicates your data three times synchronously within a single physical location in the primary region." },
+            { q: "You need to securely grant a third-party vendor read access to a specific blob in your storage account for exactly 24 hours. What should you use?", opts: ["Shared Access Signature (SAS)", "Access Keys", "Azure AD Guest Account", "Public Container Access"], a: 0, exp: "A Shared Access Signature (SAS) provides secure, granular, and time-limited delegated access to resources in your storage account." },
+            { q: "You have a Network Security Group (NSG). You create a Deny rule with a priority of 200, and an Allow rule with a priority of 300 for the same port. What happens to the traffic?", opts: ["The traffic is allowed.", "The traffic is denied.", "The rules conflict and trigger an error.", "Traffic is allowed temporarily."], a: 1, exp: "NSG rules are processed in priority order, with lower numbers processed first. The Deny rule at 200 overrides the Allow rule at 300." },
+            { q: "You deploy a Virtual Machine Scale Set (VMSS). To ensure high availability across physical datacenters within the same region, what feature must you configure?", opts: ["Availability Sets", "Availability Zones", "Update Domains", "Fault Domains"], a: 1, exp: "Availability Zones physically separate instances across different datacenters within a region. Availability Sets only separate instances across racks in a single datacenter." },
+            { q: "What is the primary purpose of an Azure Application Gateway?", opts: ["Layer 4 TCP load balancing", "Layer 7 HTTP/HTTPS load balancing and routing", "VPN termination", "DNS resolution"], a: 1, exp: "Application Gateway is a web traffic load balancer that operates at OSI Layer 7, providing features like URL path-based routing, SSL termination, and a Web Application Firewall (WAF)." },
+            { q: "You need to view the administrative actions taken on your Azure resources over the past 30 days, such as who deleted a VM. Where should you look?", opts: ["Log Analytics workspace", "Azure Activity Log", "Azure Active Directory Audit Logs", "Resource Graph"], a: 1, exp: "The Azure Activity Log provides insight into subscription-level events, showing who performed an operation on a resource, what the operation was, and when it occurred." },
+            { q: "Which tool allows you to evaluate your Azure environment against security best practices and compliance standards?", opts: ["Microsoft Defender for Cloud", "Azure Monitor", "Azure Service Health", "Azure Advisor"], a: 0, exp: "Microsoft Defender for Cloud (formerly Security Center) provides unified security management, advanced threat protection, and compliance assessments." },
+            { q: "You want to automate the process of moving blob data from the 'Hot' tier to the 'Archive' tier after 180 days. What should you configure?", opts: ["Azure Automation runbook", "Logic App", "Blob Lifecycle Management rules", "Azure Data Factory"], a: 2, exp: "Blob Lifecycle Management offers a rule-based policy that you can use to transition blob data to the appropriate access tiers or expire data at the end of the data lifecycle." },
+            { q: "A user is assigned the 'Reader' role at the Subscription level, and the 'Contributor' role on a specific Resource Group. What can the user do within that Resource Group?", opts: ["Read only.", "Create and manage resources.", "Delete the Resource Group.", "Assign RBAC roles to others."], a: 1, exp: "RBAC permissions are additive. The broader 'Reader' role allows them to see the subscription, but the 'Contributor' role at the Resource Group scope grants them full management rights over the resources inside it." },
+            { q: "Which feature ensures that Azure VMs in an Availability Set do not reboot simultaneously during planned Microsoft maintenance?", opts: ["Fault Domains", "Availability Zones", "Update Domains", "Proximity Placement Groups"], a: 2, exp: "Update Domains indicate groups of virtual machines and underlying physical hardware that can be rebooted at the same time during planned maintenance." },
+            { q: "You are configuring Azure File Sync. What is the name of the Azure resource that represents a logical grouping of synchronized server endpoints and an Azure file share?", opts: ["Storage Sync Service", "Sync Group", "Server Endpoint", "Cloud Endpoint"], a: 1, exp: "A Sync Group defines the sync topology. It contains exactly one Cloud Endpoint (the Azure file share) and one or more Server Endpoints (the local Windows servers)." },
+            { q: "You need to deploy a multi-container application quickly without provisioning virtual machines or adopting a complex orchestrator like Kubernetes. What should you use?", opts: ["Azure Kubernetes Service (AKS)", "Azure App Service", "Azure Container Instances (ACI)", "Azure Service Fabric"], a: 2, exp: "Azure Container Instances (ACI) is the fastest and simplest way to run a container in Azure, without having to manage any virtual machines or adopt a higher-level service." },
+            { q: "Which Azure service is best suited for deploying code directly from a GitHub repository to a fully managed web hosting environment?", opts: ["Azure Virtual Machines", "Azure App Service", "Azure Functions", "Azure Batch"], a: 1, exp: "Azure App Service is a fully managed PaaS offering for hosting web applications, REST APIs, and mobile back ends, with built-in CI/CD integrations." },
+            { q: "You need to collect Windows Event Logs from 50 Azure VMs for centralized querying. What is the first step?", opts: ["Deploy an Application Gateway.", "Create a Log Analytics workspace.", "Configure an Azure Storage Account.", "Install the Azure Network Watcher agent."], a: 1, exp: "To collect and query guest-level OS metrics and logs (like Windows Event Logs) using Azure Monitor, you must first create a Log Analytics workspace to store the data." },
+            { q: "What is the maximum number of Azure regions you can peer a single Virtual Network to?", opts: ["1", "5", "10", "There is no strict limit, but limits exist per subscription"], a: 3, exp: "You can peer a VNet with other VNets in multiple regions (Global VNet Peering) up to the default limit of 500 peerings per VNet." },
+            { q: "You deleted a file from an Azure File share by accident. Soft delete is enabled with a retention of 14 days. How can you recover the file?", opts: ["Use the 'Undelete' API or portal button to restore it directly.", "Download it from the Recycle Bin.", "Contact Microsoft Support.", "It cannot be restored without a Recovery Services Vault backup."], a: 0, exp: "When soft delete is enabled for Azure file shares, deleted shares or files are retained for the specified period and can be restored directly via the portal, API, or PowerShell." },
+            { q: "Which Azure load balancing solution provides global routing based on DNS to direct users to the closest regional deployment?", opts: ["Azure Load Balancer", "Azure Application Gateway", "Azure Traffic Manager", "Azure Route Server"], a: 2, exp: "Azure Traffic Manager is a DNS-based traffic load balancer that enables you to distribute traffic optimally to services across global Azure regions." },
+            { q: "You are writing a KQL query in Log Analytics to return only the top 10 results sorted by TimeGenerated. Which operator should you use?", opts: ["limit 10", "top 10", "take 10 | sort by TimeGenerated", "take 10"], a: 1, exp: "In Kusto Query Language (KQL), the 'top' operator returns the first N records sorted by the specified columns." },
+            { q: "Which tagging format is considered valid for Azure resources?", opts: ["Name: Value", "Key: Value", "Property: Value", "Metadata: Value"], a: 1, exp: "Azure tags consist of a Key and a Value (e.g., Key: 'Environment', Value: 'Production')." },
+            { q: "You need to ensure that traffic between two Azure Virtual Networks flows exclusively over Microsoft's private network. What should you use?", opts: ["VPN Gateway", "Azure ExpressRoute", "VNet Peering", "Azure Front Door"], a: 2, exp: "VNet Peering allows you to connect two VNets directly. The traffic between VMs in peered VNets is routed through the Microsoft private backbone." },
+            { q: "You have a Windows VM running in Azure. You cannot connect to it via RDP (Port 3389). What is the most likely cause?", opts: ["The VM is not in an Availability Zone.", "The Network Security Group (NSG) is blocking inbound traffic on Port 3389.", "The VM does not have an internal IP address.", "Azure Bastion is not deployed."], a: 1, exp: "By default, NSGs block all inbound traffic from the internet. To RDP, you must explicitly allow Port 3389 inbound." },
+            { q: "What is the primary function of an Azure Bastion host?", opts: ["To act as a web server proxy.", "To provide secure and seamless RDP/SSH connectivity to VMs directly from the Azure portal over TLS.", "To scan virtual networks for malware.", "To load balance UDP traffic."], a: 1, exp: "Azure Bastion provides secure RDP and SSH access to your VMs directly from the Azure portal without exposing public IP addresses." },
+            { q: "You need to migrate 50 TB of data from an on-premises datacenter to Azure Storage, but your internet bandwidth is very low. Which service is appropriate?", opts: ["Azure File Sync", "AzCopy via Internet", "Azure Data Box", "Azure ExpressRoute"], a: 2, exp: "Azure Data Box is a physical appliance sent by Microsoft that allows you to transfer terabytes of data offline when network bandwidth is limited." },
+            { q: "In an ARM template, which section is used to define the values that are provided when the deployment is executed?", opts: ["resources", "variables", "parameters", "outputs"], a: 2, exp: "The 'parameters' section allows you to pass values into the template at deployment time, making the template reusable for different environments." },
+            { q: "You need to automatically assign the 'Contributor' role to any user who is a member of the 'IT Department'. What feature of Entra ID makes this easiest?", opts: ["Dynamic Groups", "Administrative Units", "Service Principals", "Access Reviews"], a: 0, exp: "Dynamic Groups automatically add or remove users based on their attributes (like Department). If the role is assigned to the group, users get it automatically." },
+            { q: "Which tool provides a GUI interface to manage Azure Storage blobs, files, queues, and tables from your local Windows, macOS, or Linux machine?", opts: ["Azure Storage Explorer", "Azure CLI", "Azure File Sync Agent", "Azure Data Studio"], a: 0, exp: "Azure Storage Explorer is a standalone desktop application from Microsoft that allows you to visually manage your Azure storage data." },
+            { q: "What is the default routing behavior for outbound internet traffic from an Azure Virtual Machine?", opts: ["It is blocked by default.", "It is routed to the internet using Azure's default system route (0.0.0.0/0).", "It must be routed through a VPN Gateway.", "It is routed to an Azure Firewall."], a: 1, exp: "By default, Azure automatically creates a system route for 0.0.0.0/0 that directs traffic from subnets to the Internet." },
+            { q: "You need to resolve custom domain names within your Virtual Network without exposing the DNS zone to the public internet. What should you create?", opts: ["Azure Public DNS Zone", "Azure Private DNS Zone", "Custom DNS Server on a VM", "Azure Traffic Manager"], a: 1, exp: "An Azure Private DNS zone provides reliable, secure DNS service to manage and resolve domain names in a virtual network without needing custom DNS solutions." },
+            { q: "Which Azure service allows you to securely store and manage cryptographic keys, secrets, and certificates?", opts: ["Azure Security Center", "Azure Active Directory", "Azure Key Vault", "Azure Information Protection"], a: 2, exp: "Azure Key Vault is a cloud service for securely storing and accessing secrets (like API keys, passwords, and certificates)." },
+            { q: "What is the primary benefit of using Azure Virtual Machine Scale Sets (VMSS) over individual VMs?", opts: ["Cheaper compute costs.", "Automated scaling and load balancing management of identical VMs.", "Support for legacy operating systems.", "Faster disk I/O performance."], a: 1, exp: "VMSS allows you to create and manage a group of load-balanced VMs that can automatically increase or decrease in number in response to demand." },
+            { q: "You want to evaluate if a user has sufficient permissions to delete a resource group. Which Azure tool provides an 'Effective access' view?", opts: ["Azure Policy Compliance", "Access Control (IAM) -> Check access", "Azure Activity Log", "Azure Advisor"], a: 1, exp: "The 'Check access' feature in the IAM blade allows you to look up a specific user and view their effective permissions across roles." },
+            { q: "When creating an Azure File share, which protocol is typically used to mount the share on a Windows machine?", opts: ["NFS", "FTP", "SMB", "HTTP"], a: 2, exp: "Server Message Block (SMB) is the standard protocol used by Windows to mount network file shares, including Azure Files." },
+            { q: "You need to trigger a webhook when a Virtual Machine stops running. What Azure Monitor feature should you configure?", opts: ["Diagnostic settings", "Log queries", "Alert rules", "Metrics Explorer"], a: 2, exp: "Alert rules in Azure Monitor proactively notify you (via email, SMS, or webhooks) when data in your monitoring telemetry meets a specified condition." },
+            { q: "Which storage redundancy option replicates your data to a secondary geographic region and allows read access to the secondary region if the primary goes down?", opts: ["LRS", "ZRS", "GRS", "RA-GRS"], a: 3, exp: "Read-Access Geo-Redundant Storage (RA-GRS) provides geo-redundancy and allows you to read from the secondary region at all times." },
+            { q: "You are setting up Azure Backup for an on-premises Windows Server. What piece of software must be installed on the server?", opts: ["Log Analytics agent", "MARS agent", "Azure File Sync agent", "Azure AD Connect"], a: 1, exp: "The Microsoft Azure Recovery Services (MARS) agent is required to back up files, folders, and system state from an on-premises machine to Azure." },
+            { q: "Which JSON element in an ARM template links the output of one resource deployment to the input of another, ensuring proper deployment order?", opts: ["parameters", "variables", "dependsOn", "outputs"], a: 2, exp: "The 'dependsOn' array explicitly defines a dependency, telling the Azure Resource Manager to wait for one resource to finish deploying before starting another." },
+            { q: "What is the primary characteristic of an Azure 'Standard' Public IP address compared to a 'Basic' Public IP?", opts: ["It is always dynamic.", "It supports Availability Zones and is secure by default (requires NSG).", "It is free of charge.", "It cannot be assigned to Load Balancers."], a: 1, exp: "Standard Public IPs are static, zone-redundant, and closed to inbound traffic by default, requiring a Network Security Group to explicitly allow traffic." },
+            { q: "You need to manage Azure resources from a Mac using command-line tools without installing any software locally. What is the best option?", opts: ["Azure PowerShell on macOS", "Azure CLI via Homebrew", "Azure Cloud Shell via the browser", "Remote Desktop to a Windows VM"], a: 2, exp: "Azure Cloud Shell provides an interactive, authenticated, browser-accessible terminal (Bash or PowerShell) requiring no local installation." }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let hasAnswered = false;
+        
+        let quizState = {
+            inProgress: false,
+            currentQuestion: 0,
+            score: 0,
+            hasAnswered: false,
+            selectedOption: null,
+            finished: false
+        };
+
+        const questionEl = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-grid');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationTitle = document.getElementById('explanation-title');
+        const explanationText = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        const progressFill = document.getElementById('progress-fill');
+        const tracker = document.getElementById('question-tracker');
+        const scoreTracker = document.getElementById('score-tracker');
+        
+        const quizEngine = document.getElementById('quiz-engine');
+        const introScreen = document.getElementById('intro-screen');
+        const summaryScreen = document.getElementById('summary-screen');
+
+        function saveQuizState() {
+            localStorage.setItem('az104_quiz_state', JSON.stringify(quizState));
+        }
+
+        function loadQuizState() {
+            const saved = localStorage.getItem('az104_quiz_state');
+            if (saved) {
+                quizState = JSON.parse(saved);
+                currentQuestion = quizState.currentQuestion;
+                score = quizState.score;
+                hasAnswered = quizState.hasAnswered;
+            }
+        }
+
+        function resetQuiz(skipConfirm = false) {
+            if (skipConfirm || confirm("Are you sure you want to reset your exam progress?")) {
+                localStorage.removeItem('az104_quiz_state');
+                location.reload();
+            }
+        }
+
+        function startQuiz() {
+            introScreen.style.display = 'none';
+            quizEngine.style.display = 'flex';
+            quizState.inProgress = true;
+            saveQuizState();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            
+            tracker.innerText = `Question ${currentQuestion + 1} of ${questions.length}`;
+            progressFill.style.width = `${((currentQuestion) / questions.length) * 100}%`;
+            scoreTracker.innerText = `Score: ${score}`;
+            
+            questionEl.innerText = q.q;
+            optionsContainer.innerHTML = '';
+            explanationBox.style.display = 'none';
+            nextBtn.style.display = 'none';
+            
+            const letters = ['A', 'B', 'C', 'D'];
+            
+            q.opts.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span class="option-letter">${letters[index]}</span> <span>${opt}</span>`;
+                btn.onclick = () => selectOption(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            // If user had already answered this question before refreshing, restore the visual state
+            if (quizState.hasAnswered && quizState.selectedOption !== null) {
+                restoreAnswerState();
+            } else {
+                hasAnswered = false;
+                quizState.hasAnswered = false;
+                quizState.selectedOption = null;
+                saveQuizState();
+            }
+        }
+
+        function restoreAnswerState() {
+            const q = questions[currentQuestion];
+            const buttons = optionsContainer.querySelectorAll('.option-btn');
+            const selectedBtn = buttons[quizState.selectedOption];
+            
+            buttons.forEach(btn => btn.disabled = true);
+            
+            if (quizState.selectedOption === q.a) {
+                selectedBtn.classList.add('correct');
+                showExplanation(true, q.exp);
+            } else {
+                selectedBtn.classList.add('incorrect');
+                buttons[q.a].classList.add('correct');
+                showExplanation(false, q.exp);
+            }
+            
+            nextBtn.style.display = 'block';
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.innerHTML = 'Finish Exam <i class="fa-solid fa-flag-checkered" style="margin-left: 5px;"></i>';
+            }
+        }
+
+        function selectOption(selectedIndex, btnElement) {
+            if (hasAnswered) return;
+            hasAnswered = true;
+            quizState.hasAnswered = true;
+            quizState.selectedOption = selectedIndex;
+            
+            const q = questions[currentQuestion];
+            const buttons = optionsContainer.querySelectorAll('.option-btn');
+            
+            buttons.forEach(btn => btn.disabled = true);
+            
+            if (selectedIndex === q.a) {
+                score++;
+                quizState.score = score;
+                scoreTracker.innerText = `Score: ${score}`;
+                btnElement.classList.add('correct');
+                showExplanation(true, q.exp);
+            } else {
+                btnElement.classList.add('incorrect');
+                buttons[q.a].classList.add('correct');
+                showExplanation(false, q.exp);
+            }
+            
+            saveQuizState();
+            
+            nextBtn.style.display = 'block';
+            
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.innerHTML = 'Finish Exam <i class="fa-solid fa-flag-checkered" style="margin-left: 5px;"></i>';
+            }
+        }
+
+        function showExplanation(isCorrect, text) {
+            explanationBox.style.display = 'block';
+            explanationBox.className = 'explanation-box'; // reset
+            
+            if (isCorrect) {
+                explanationBox.classList.add('correct-bg');
+                explanationTitle.innerHTML = '<i class="fa-solid fa-circle-check" style="color: var(--accent-green);"></i> Correct!';
+                explanationTitle.style.color = 'var(--accent-green)';
+            } else {
+                explanationBox.classList.add('incorrect-bg');
+                explanationTitle.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color: var(--error-red);"></i> Incorrect';
+                explanationTitle.style.color = 'var(--error-red)';
+            }
+            
+            explanationText.innerText = text;
+        }
+
+        function handleNext() {
+            currentQuestion++;
+            quizState.currentQuestion = currentQuestion;
+            quizState.hasAnswered = false;
+            quizState.selectedOption = null;
+            hasAnswered = false;
+            
+            if (currentQuestion < questions.length) {
+                saveQuizState();
+                loadQuestion();
+            } else {
+                quizState.finished = true;
+                saveQuizState();
+                showSummary();
+            }
+        }
+
+        function showSummary() {
+            quizEngine.style.display = 'none';
+            introScreen.style.display = 'none';
+            summaryScreen.style.display = 'block';
+            
+            const finalScoreEl = document.getElementById('final-score');
+            const summaryMsg = document.getElementById('summary-message');
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            finalScoreEl.innerText = `${percentage}%`;
+            
+            if (percentage >= 70) {
+                finalScoreEl.style.borderColor = 'var(--accent-green)';
+                finalScoreEl.style.color = 'var(--accent-green)';
+                summaryMsg.innerText = "Congratulations! You have passed the simulator.";
+                summaryMsg.style.color = 'var(--accent-green)';
+            } else {
+                finalScoreEl.style.borderColor = 'var(--error-red)';
+                finalScoreEl.style.color = 'var(--error-red)';
+                summaryMsg.innerText = "Keep studying! The passing score is 70%. Focus on your weak areas and try again.";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const submenuToggles = document.querySelectorAll('.submenu-toggle');
+            const themeToggleBtn = document.getElementById('themeToggle');
+            const themeIcon = themeToggleBtn.querySelector('i');
+            const themeText = themeToggleBtn.querySelector('span');
+
+            // Dark Mode Initialization
+            if (localStorage.getItem('az104_theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                themeText.innerText = 'Light Mode';
+            }
+            themeToggleBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('az104_theme', isDark ? 'dark' : 'light');
+                if (isDark) {
+                    themeIcon.classList.replace('fa-moon', 'fa-sun');
+                    themeText.innerText = 'Light Mode';
+                } else {
+                    themeIcon.classList.replace('fa-sun', 'fa-moon');
+                    themeText.innerText = 'Dark Mode';
+                }
+            });
+
+            // Sidebar Initialization
+            if (localStorage.getItem('az104_sidebar_collapsed') === 'true') {
+                sidebar.classList.add('collapsed');
+            }
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                localStorage.setItem('az104_sidebar_collapsed', sidebar.classList.contains('collapsed'));
+            });
+            submenuToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.stopPropagation(); 
+                    const parentLi = this.closest('.has-submenu');
+                    parentLi.classList.toggle('expanded');
+                });
+            });
+
+            // Quiz State Initialization
+            loadQuizState();
+            if (quizState.finished) {
+                showSummary();
+            } else if (quizState.inProgress) {
+                introScreen.style.display = 'none';
+                quizEngine.style.display = 'flex';
+                loadQuestion();
+            }
+        });
+    </script>
+</body>
+</html>
